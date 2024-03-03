@@ -1,5 +1,8 @@
 ﻿using LT.model;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +21,19 @@ namespace LT.dal.Context
             optionsBuilder.UseSqlServer(
                 @"Server=(LocalDb)\MSSQLLocalDB;Database=LTDb;Trusted_Connection=True");
 
-            //optionsBuilder.UseSqlLite(
-            //    @"Server=(LocalDb)\MSSQLLocalDB;Database=LTDb;Trusted_Connection=True");
+        }
+    }
+    public class IdentityDbContext : IdentityDbContext<IdentityUser>
+    {
+        public IdentityDbContext(DbContextOptions<IdentityDbContext> options) :
+            base(options)
+        {
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(
+                @"Server=(LocalDb)\MSSQLLocalDB;Database=LTDb;Trusted_Connection=True");
+
         }
     }
 }
