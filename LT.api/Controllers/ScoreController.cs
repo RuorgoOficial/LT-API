@@ -1,10 +1,12 @@
 using LT.core;
 using LT.dal.Context;
 using LT.model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LT.api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ScoreController : ControllerBase

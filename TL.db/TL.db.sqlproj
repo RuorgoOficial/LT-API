@@ -65,5 +65,10 @@
   <ItemGroup>
     <Build Include="dbo\Tables\Test.sql" />
     <Build Include="dbo\Tables\Score.sql" />
+    <Build Include="dbo\Tables\AspNetUsers.sql" />
+    <Build Include="dbo\Tables\AspNetRoles.sql" />
+    <Build Include="dbo\Tables\AspNetUserClaims.sql" />
+    <Build Include="dbo\Tables\AspNetUserLogins.sql" />
+    <Build Include="dbo\Tables\AspNetUserRoles.sql" />
   </ItemGroup>
 </Project>

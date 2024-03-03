@@ -1,5 +1,9 @@
 using LT.dal.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
+using Microsoft.AspNetCore.Identity.UI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<LTContext>();
+builder.Services.AddDbContext<LT.dal.Context.IdentityDbContext>();
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>(opt =>
+{
+    opt.Password.RequiredLength = 8;
+    opt.User.RequireUniqueEmail = true;
+    opt.Password.RequireNonAlphanumeric = false;
+    opt.SignIn.RequireConfirmedEmail = false;
+})
+        .AddDefaultUI()
+        .AddEntityFrameworkStores<LT.dal.Context.IdentityDbContext>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -24,6 +39,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.MapIdentityApi<IdentityUser>();
 
 app.MapControllers();
 
