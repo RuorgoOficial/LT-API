@@ -9,23 +9,23 @@ using System.Threading.Tasks;
 
 namespace LT.core
 {
-    public class TestCore
+    public class TestCore : BaseCore<EntityTest>
     {
 
         private readonly LTContext _context;
         private readonly TestDal _dal;
 
-        public TestCore(LTContext context)
+        public TestCore(LTContext context) : base(context) 
         {
             _context = context;
             _dal = new TestDal(_context);
         }
 
-        public List<EntityTest> Get()
+        public override List<EntityTest> Get()
         {
             return _dal.Get();
         }
-        public int Insert(EntityTest entity)
+        public override int Insert(EntityTest entity)
         {
             return _dal.Insert(entity);
         }

@@ -9,23 +9,14 @@ using System.Threading.Tasks;
 
 namespace LT.dal.Access
 {
-    public class TestDal
+    public class TestDal : BaseDal<EntityTest>
     {
         private readonly LTContext _context;
-        public TestDal(LTContext context) {
+
+        public TestDal(LTContext context) : base(context) 
+        {
             _context = context;
         }
 
-        public List<EntityTest> Get()
-        {
-            return _context.Test.ToList();
-        }
-
-        public int Insert(EntityTest test)
-        {
-            _context.Test.Add(test);
-            _context.SaveChanges();
-            return test.Id;
-        }
     }
 }

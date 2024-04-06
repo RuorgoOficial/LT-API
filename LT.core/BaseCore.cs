@@ -9,23 +9,22 @@ using System.Threading.Tasks;
 
 namespace LT.core
 {
-    public class ScoreCore : BaseCore<EntityScore>
+    public class BaseCore <E> where E : EntityBase
     {
-
         private readonly LTContext _context;
-        private readonly BaseDal<EntityScore> _dal;
+        private readonly BaseDal<E> _dal;
 
-        public ScoreCore(LTContext context) : base(context) 
+        public BaseCore(LTContext context)
         {
             _context = context;
-            _dal = new ScoreDal(_context);
+            _dal = new BaseDal<E>(_context);
         }
-        
-        public override List<EntityScore> Get()
+
+        public virtual List<E> Get()
         {
             return _dal.Get();
         }
-        public override int Insert(EntityScore entity)
+        public virtual int Insert(E entity)
         {
             return _dal.Insert(entity);
         }

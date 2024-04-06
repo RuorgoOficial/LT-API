@@ -16,4 +16,8 @@
     <ProjectReference Include="..\LT.model\LT.model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Abstractions\" />
+  </ItemGroup>
+
 </Project>

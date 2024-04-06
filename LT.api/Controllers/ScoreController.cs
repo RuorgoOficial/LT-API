@@ -6,19 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LT.api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ScoreController : ControllerBase
     {
         private readonly ILogger<ScoreController> _logger;
         private readonly LTContext _context;
+        //private readonly BaseCore<EntityScore> _core;
         private readonly ScoreCore _core;
 
         public ScoreController(ILogger<ScoreController> logger, LTContext context)
         {
             _logger = logger;
             _context = context;
+            //_core = new BaseCore<EntityScore>(_context);
             _core = new ScoreCore(_context);
         }
 
