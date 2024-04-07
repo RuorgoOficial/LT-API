@@ -1,23 +1,21 @@
+using LT.api.Services;
+using LT.core;
 using LT.dal.Context;
+using LT.model;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<LTContext>();
-builder.Services.AddDbContext<LT.dal.Context.IdentityDbContext>();
-builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<IdentityUser>(opt =>
-{
-    opt.Password.RequiredLength = 8;
-    opt.User.RequireUniqueEmail = true;
-    opt.Password.RequireNonAlphanumeric = false;
-    opt.SignIn.RequireConfirmedEmail = false;
-})
-        .AddDefaultUI()
-        .AddEntityFrameworkStores<LT.dal.Context.IdentityDbContext>();
+builder.Services.AddDatabaseContext();
+builder.Services.AddCore();
+builder.Services.AddDal();
+builder.Services.AddIdentity();
+builder.Services.AddConfig();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

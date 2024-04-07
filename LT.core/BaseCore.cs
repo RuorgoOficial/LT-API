@@ -9,15 +9,13 @@ using System.Threading.Tasks;
 
 namespace LT.core
 {
-    public class BaseCore <E> where E : EntityBase
+    public class BaseCore <D, E> where D: BaseDal<E> where E : EntityBase
     {
-        private readonly LTContext _context;
-        private readonly BaseDal<E> _dal;
+        private readonly D _dal;
 
-        public BaseCore(LTContext context)
+        public BaseCore(D dal)
         {
-            _context = context;
-            _dal = new BaseDal<E>(_context);
+            _dal = dal;
         }
 
         public virtual List<E> Get()

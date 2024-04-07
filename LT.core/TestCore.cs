@@ -9,16 +9,14 @@ using System.Threading.Tasks;
 
 namespace LT.core
 {
-    public class TestCore : BaseCore<EntityTest>
+    public class TestCore : BaseCore<BaseDal<EntityTest>,EntityTest>
     {
 
-        private readonly LTContext _context;
         private readonly TestDal _dal;
 
-        public TestCore(LTContext context) : base(context) 
+        public TestCore(TestDal dal) : base(dal) 
         {
-            _context = context;
-            _dal = new TestDal(_context);
+            _dal = dal;
         }
 
         public override List<EntityTest> Get()

@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[AspNetUsers] (
+﻿CREATE TABLE [dbo].[User] (
     [Id]                   NVARCHAR (128) NOT NULL,
     [Email]                NVARCHAR (256) NULL,
     [EmailConfirmed]       BIT            NOT NULL,
@@ -15,11 +15,11 @@
     [NormalizedEmail]      NVARCHAR (256) NULL,
     [ConcurrencyStamp]     NVARCHAR (256) NULL,
     [LockoutEnd]           DATETIME       NULL,
-    CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CONSTRAINT [PK_dbo.User] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
 
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [UserNameIndex]
-    ON [dbo].[AspNetUsers]([UserName] ASC);
+    ON [dbo].[User]([UserName] ASC);
 

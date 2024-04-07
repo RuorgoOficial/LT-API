@@ -9,16 +9,13 @@ using System.Threading.Tasks;
 
 namespace LT.core
 {
-    public class ScoreCore : BaseCore<EntityScore>
+    public class ScoreCore : BaseCore<BaseDal<EntityScore>,EntityScore>
     {
-
-        private readonly LTContext _context;
         private readonly BaseDal<EntityScore> _dal;
 
-        public ScoreCore(LTContext context) : base(context) 
+        public ScoreCore(LTContext context, BaseDal<EntityScore> dal) : base(dal) 
         {
-            _context = context;
-            _dal = new ScoreDal(_context);
+            _dal = dal;
         }
         
         public override List<EntityScore> Get()
