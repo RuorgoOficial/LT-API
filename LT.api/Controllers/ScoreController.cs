@@ -6,17 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LT.api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ScoreController : ControllerBase
     {
         private readonly ILogger<ScoreController> _logger;
+        private readonly AppSettings _appSettings;
         private readonly ScoreCore _core;
 
-        public ScoreController(ILogger<ScoreController> logger, ScoreCore core)
+        public ScoreController(ILogger<ScoreController> logger, AppSettings appSettings, ScoreCore core)
         {
             _logger = logger;
+            _appSettings = appSettings;
             _core = core;
         }
 

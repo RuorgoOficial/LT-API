@@ -1,6 +1,7 @@
 ﻿using LT.dal.Context;
 using LT.model;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data.Common;
 
@@ -18,7 +19,6 @@ namespace LT.api.Services
 
             return services;
         }
-
         public static IServiceCollection AddDal(
              this IServiceCollection services)
         {
@@ -29,17 +29,6 @@ namespace LT.api.Services
 
             return services;
         }
-
-        public static IServiceCollection AddDatabaseContext(
-             this IServiceCollection services)
-        {
-
-            services.AddDbContext<LTContext>();
-            services.AddDbContext<LT.dal.Context.IdentityDbContext>();
-
-            return services;
-        }
-
         public static IServiceCollection AddIdentity(
              this IServiceCollection services)
         {
@@ -57,13 +46,23 @@ namespace LT.api.Services
 
             return services;
         }
-
         public static IServiceCollection AddConfig(
-             this IServiceCollection services)
+             this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddScoped<ConfigurationBuilder>();
-            //configuration.GetConnectionString("LTContext");
-            //configuration.GetConnectionString("IdentityDbContext");
+            services.Configure<ConnectionStrings>(configuration);
+            services.AddScoped<ConnectionStrings>();
+
+            services.Configure<AppSettings>(configuration);
+            services.AddScoped<AppSettings>();
+
+            return services;
+        }
+        public static IServiceCollection AddDatabaseContext(
+             this IServiceCollection services, IConfiguration configuration)
+        {
+
+            services.AddDbContext<LTContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("LTContext")));
+            services.AddDbContext<LT.dal.Context.IdentityDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("IdentityDbContext")));
 
             return services;
         }
