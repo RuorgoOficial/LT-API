@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LT.api", "LT.api\LT.api.csproj", "{4DBF42CD-BA93-4F62-8649-713D1CC5153D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LT.api", "LT.api\LT.api.csproj", "{4DBF42CD-BA93-4F62-8649-713D1CC5153D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LT.model", "LT.model\LT.model.csproj", "{D00C977C-370F-4809-B739-9E105B69F99A}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LT.core", "LT.core\LT.core.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LT.dal", "LT.dal\LT.dal.csproj", "{910DEEA1-EB77-4347-8884-80D9E4D183EC}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "TL.db", "TL.db\TL.db.sqlproj", "{B46B171A-0E6C-45D9-99FC-0A07ABB916F8}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "LT.db", "LT.db\LT.db.sqlproj", "{E6B8797A-6802-4F27-8093-4F2BC849299B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +35,12 @@ Global
 		{910DEEA1-EB77-4347-8884-80D9E4D183EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{910DEEA1-EB77-4347-8884-80D9E4D183EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{910DEEA1-EB77-4347-8884-80D9E4D183EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B46B171A-0E6C-45D9-99FC-0A07ABB916F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B46B171A-0E6C-45D9-99FC-0A07ABB916F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B46B171A-0E6C-45D9-99FC-0A07ABB916F8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{B46B171A-0E6C-45D9-99FC-0A07ABB916F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B46B171A-0E6C-45D9-99FC-0A07ABB916F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B46B171A-0E6C-45D9-99FC-0A07ABB916F8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E6B8797A-6802-4F27-8093-4F2BC849299B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B8797A-6802-4F27-8093-4F2BC849299B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B8797A-6802-4F27-8093-4F2BC849299B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E6B8797A-6802-4F27-8093-4F2BC849299B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B8797A-6802-4F27-8093-4F2BC849299B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B8797A-6802-4F27-8093-4F2BC849299B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
