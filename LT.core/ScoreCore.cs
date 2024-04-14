@@ -13,7 +13,7 @@ namespace LT.core
     {
         private readonly BaseDal<EntityScore> _dal;
 
-        public ScoreCore(LTContext context, BaseDal<EntityScore> dal) : base(dal) 
+        public ScoreCore(LTDBContext context, BaseDal<EntityScore> dal) : base(dal) 
         {
             _dal = dal;
         }

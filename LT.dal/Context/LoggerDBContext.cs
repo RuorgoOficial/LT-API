@@ -12,12 +12,11 @@ using System.Threading.Tasks;
 
 namespace LT.dal.Context
 {
-    public class LTDBContext : DbContext
+    public class LoggerDBContext : DbContext
     {
-        public LTDBContext(DbContextOptions<LTDBContext> options) : base(options) { 
+        public LoggerDBContext(DbContextOptions<LoggerDBContext> options) : base(options) { 
         }
 
-        public DbSet<EntityTest> Test { get; set; }
-        public DbSet<EntityScore> Score { get; set; }
+        public DbSet<EntityError> Error { get; set; }
     }
 }

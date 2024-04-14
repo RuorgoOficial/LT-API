@@ -11,8 +11,8 @@ namespace LT.dal.Access
 {
     public class ScoreDal : BaseDal<EntityScore>
     {
-        private readonly LTContext _context;
-        public ScoreDal(LTContext context) : base(context) {
+        private readonly LTDBContext _context;
+        public ScoreDal(LTDBContext context) : base(context) {
             _context = context;
         }
 

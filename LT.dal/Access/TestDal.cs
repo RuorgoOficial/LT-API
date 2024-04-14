@@ -11,9 +11,9 @@ namespace LT.dal.Access
 {
     public class TestDal : BaseDal<EntityTest>
     {
-        private readonly LTContext _context;
+        private readonly LTDBContext _context;
 
-        public TestDal(LTContext context) : base(context) 
+        public TestDal(LTDBContext context) : base(context) 
         {
             _context = context;
         }

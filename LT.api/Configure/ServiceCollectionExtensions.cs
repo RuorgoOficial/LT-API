@@ -1,11 +1,18 @@
-﻿using LT.dal.Context;
+﻿using Asp.Versioning;
+using LT.api.Controllers;
+using LT.api.Metrics;
+using LT.dal;
+using LT.dal.Context;
 using LT.model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging.Configuration;
+using OpenTelemetry.Metrics;
 using System.Data.Common;
 
-namespace LT.api.Services
+namespace LT.api.Configure
 {
     public static class ServiceCollectionExtensions
     {
@@ -32,7 +39,6 @@ namespace LT.api.Services
         public static IServiceCollection AddIdentity(
              this IServiceCollection services)
         {
-
             services.AddAuthorization();
             services.AddIdentityApiEndpoints<IdentityUser>(opt =>
             {
@@ -60,11 +66,30 @@ namespace LT.api.Services
         public static IServiceCollection AddDatabaseContext(
              this IServiceCollection services, IConfiguration configuration)
         {
-
-            services.AddDbContext<LTContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("LTContext")));
+            services.AddDbContext<LTDBContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("LTContext")));
+            services.AddDbContext<LoggerDBContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("LoggerDBContext")));
             services.AddDbContext<LT.dal.Context.IdentityDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("IdentityDbContext")));
 
             return services;
         }
+        public static IServiceCollection AddApiVersioningService(
+             this IServiceCollection services)
+        {
+            services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(2);
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ApiVersionReader = ApiVersionReader.Combine(
+                    new UrlSegmentApiVersionReader(),
+                    new HeaderApiVersionReader("X-Api-Version"));
+            }).AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'V";
+                options.SubstituteApiVersionInUrl = true;
+            });
+            return services;
+        }
+
     }
 }

@@ -1,9 +1,10 @@
-using LT.api.Services;
-using LT.core;
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
+using LT.api.Configure;
+using LT.api.Metrics;
 using LT.dal.Context;
-using LT.model;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using OpenTelemetry.Metrics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,22 +16,24 @@ builder.Services.AddCore();
 builder.Services.AddDal();
 builder.Services.AddIdentity();
 builder.Services.AddConfig(builder.Configuration);
-
+builder.AddOpenTelemetryHealthChecks();
+builder.Services.AddApiVersioningService();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseSwagger();
-app.UseSwaggerUI();
+app.AddSwagger();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapIdentityApi<IdentityUser>();
+app.MapHealthChecks("/healthz");
 
 app.MapControllers();
 

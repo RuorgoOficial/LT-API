@@ -67,5 +67,6 @@
     <Build Include="dbo\Tables\UserClaim.sql" />
     <Build Include="dbo\Tables\UserLogin.sql" />
     <Build Include="dbo\Tables\UserRole.sql" />
+    <Build Include="dbo\Tables\Error.sql" />
   </ItemGroup>
 </Project>

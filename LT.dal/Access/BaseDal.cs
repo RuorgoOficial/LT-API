@@ -10,8 +10,8 @@ namespace LT.dal.Access
 {
     public class BaseDal<T> where T : EntityBase
     {
-        private readonly LTContext _context;
-        public BaseDal(LTContext context)
+        private readonly LTDBContext _context;
+        public BaseDal(LTDBContext context)
         {
             _context = context;
         }
