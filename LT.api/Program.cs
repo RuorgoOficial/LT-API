@@ -18,6 +18,7 @@ builder.Services.AddIdentity();
 builder.Services.AddConfig(builder.Configuration);
 builder.AddOpenTelemetryHealthChecks();
 builder.Services.AddApiVersioningService();
+builder.Services.AddAutoMapper();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

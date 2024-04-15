@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using AutoMapper;
 using LT.api.Controllers;
 using LT.api.Metrics;
 using LT.dal;
@@ -88,6 +89,19 @@ namespace LT.api.Configure
                 options.GroupNameFormat = "'v'V";
                 options.SubstituteApiVersionInUrl = true;
             });
+            return services;
+        }
+
+        public static IServiceCollection AddAutoMapper(
+             this IServiceCollection services)
+        {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
             return services;
         }
 
