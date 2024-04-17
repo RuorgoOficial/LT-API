@@ -2,13 +2,17 @@ using Asp.Versioning;
 using AutoMapper;
 using LT.api.Metrics;
 using LT.core;
+using LT.core.Handlers.Score;
 using LT.dal;
 using LT.dal.Context;
 using LT.model;
+using LT.model.Commands.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using System.Reflection;
+using System.Threading;
 
 namespace LT.api.Controllers.V2
 {
@@ -18,55 +22,59 @@ namespace LT.api.Controllers.V2
     [Route("api/v{v:apiVersion}/[controller]")]
     public class ScoreController : ControllerBase
     {
-        private readonly ILogger<ScoreController> _logger;
-        private readonly AppSettings _appSettings;
-        private readonly ScoreCore _core;
         private readonly GetMetrics _metrics;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public ScoreController(ILogger<ScoreController> logger, AppSettings appSettings, ScoreCore core, GetMetrics metrics, IMapper mapper)
+        public ScoreController(
+            GetMetrics metrics, 
+            IMediator mediator)
         {
-            _logger = logger;
-            _appSettings = appSettings;
-            _core = core;
             _metrics = metrics;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         //Get
         [MapToApiVersion(2)]
         [HttpGet]
-        public IEnumerable<EntityScoreDto> Get()
+        public async Task<IEnumerable<EntityScoreDto>> Get(CancellationToken cancellationToken)
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
-            return _core.Get().Select(e => _mapper.Map<EntityScoreDto>(e));
+
+            var query = new GetScoreQuery();
+            return await _mediator.Send(query, cancellationToken);
         }
 
         [MapToApiVersion(2)]
         [HttpPost]
-        public int Insert(EntityScoreDto test)
+        public async Task<int> Insert(EntityScoreDto entity, CancellationToken cancellationToken)
         {
-            var testCoreEntity = _mapper.Map<EntityScore>(test);
-            return _core.Insert(testCoreEntity);
+            _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
+            var query = new InsertScoreQuery(entity);
+            return await _mediator.Send(query, cancellationToken);
         }
         [MapToApiVersion(2)]
         [HttpPut]
-        public int Update(EntityScoreDto test)
+        public async Task<int> Update(EntityScoreDto entity, CancellationToken cancellationToken)
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
-            return 0;
+
+            var query = new UpdateScoreQuery(entity);
+            return await _mediator.Send(query, cancellationToken);
         }
         [MapToApiVersion(2)]
         [HttpDelete]
-        public int Delete(EntityScoreDto test)
+        public int Delete(EntityScoreDto entity)
         {
             return 0;
         }
         [MapToApiVersion(2)]
         [HttpPatch]
-        public int Patch(EntityScoreDto test)
+        public async Task<int> Patch(EntityScoreDto entity, CancellationToken cancellationToken)
         {
-            return 0;
+            _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
+
+            var query = new UpdateScoreQuery(entity);
+            return await _mediator.Send(query, cancellationToken);
         }
     }
 }

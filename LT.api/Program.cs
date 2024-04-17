@@ -9,11 +9,12 @@ using OpenTelemetry.Metrics;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+//builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(VersionExtensions).Assembly); });
+builder.Services.AddMediatRAssemblies();
 builder.Services.AddControllers();
-builder.Services.AddDatabaseContext(builder.Configuration);
 builder.Services.AddCore();
 builder.Services.AddDal();
+builder.Services.AddDatabaseContext(builder.Configuration);
 builder.Services.AddIdentity();
 builder.Services.AddConfig(builder.Configuration);
 builder.AddOpenTelemetryHealthChecks();
@@ -33,7 +34,7 @@ app.AddSwagger();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.MapIdentityApi<IdentityUser>();
+//app.MapIdentityApi<IdentityUser>();
 app.MapHealthChecks("/healthz");
 
 app.MapControllers();

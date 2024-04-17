@@ -2,9 +2,13 @@
 using AutoMapper;
 using LT.api.Controllers;
 using LT.api.Metrics;
+using LT.core.Services;
 using LT.dal;
+using LT.dal.Abstractions;
+using LT.dal.Access;
 using LT.dal.Context;
 using LT.model;
+using LT.model.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.Configuration;
 using OpenTelemetry.Metrics;
 using System.Data.Common;
+using System.Reflection;
 
 namespace LT.api.Configure
 {
@@ -30,6 +35,8 @@ namespace LT.api.Configure
         public static IServiceCollection AddDal(
              this IServiceCollection services)
         {
+            services.AddScoped(typeof(ILTRepository<EntityScore>), typeof(BaseDal<EntityScore>));
+            services.AddScoped(typeof(ILTRepository<EntityScore>), typeof(ScoreDal));
             services.AddScoped<LT.dal.Access.BaseDal<EntityScore>>();
             services.AddScoped<LT.dal.Access.BaseDal<EntityTest>>();
             services.AddScoped<LT.dal.Access.ScoreDal>();
@@ -91,7 +98,6 @@ namespace LT.api.Configure
             });
             return services;
         }
-
         public static IServiceCollection AddAutoMapper(
              this IServiceCollection services)
         {
@@ -102,6 +108,12 @@ namespace LT.api.Configure
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+            return services;
+        }
+        public static IServiceCollection AddMediatRAssemblies(this IServiceCollection services)
+        {
+            services.AddApplication();
+
             return services;
         }
 
