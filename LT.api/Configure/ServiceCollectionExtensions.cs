@@ -35,6 +35,8 @@ namespace LT.api.Configure
         public static IServiceCollection AddDal(
              this IServiceCollection services)
         {
+            services.AddScoped<ILTUnitOfWork, LTUnitOfWork>();
+
             services.AddScoped(typeof(ILTRepository<EntityScore>), typeof(BaseDal<EntityScore>));
             services.AddScoped(typeof(ILTRepository<EntityScore>), typeof(ScoreDal));
             services.AddScoped<LT.dal.Access.BaseDal<EntityScore>>();

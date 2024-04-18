@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LT.dal.Abstractions;
 using LT.dal.Access;
 using LT.dal.Context;
 using LT.model;

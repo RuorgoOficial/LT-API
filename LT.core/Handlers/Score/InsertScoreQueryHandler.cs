@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LT.dal.Abstractions;
 using LT.dal.Access;
 using LT.dal.Context;
 using LT.model;
@@ -16,14 +17,18 @@ namespace LT.core.Handlers.Score
     {
         private readonly BaseDal<EntityScore> _dal;
         private readonly IMapper _mapper;
-        public InsertScoreQueryHandler(BaseDal<EntityScore> dal, IMapper mapper) { 
+        private readonly ILTUnitOfWork _unitOfWork;
+        public InsertScoreQueryHandler(BaseDal<EntityScore> dal, IMapper mapper, ILTUnitOfWork unitOfWork) { 
             _dal = dal;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }   
         public async Task<int> Handle(UpdateScoreQuery request, CancellationToken cancellationToken)
         {
             var entity = _mapper.Map<EntityScore>(request.GetEntity());
             await _dal.Add(entity);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             return entity.Id;
         }
     }

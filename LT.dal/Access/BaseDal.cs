@@ -13,29 +13,27 @@ namespace LT.dal.Access
 {
     public class BaseDal<T> : ILTRepository<T> where T : EntityBase
     {
-        private readonly LTDBContext _context;
+        private readonly DbSet<T> _dbSet;
         public BaseDal(LTDBContext context)
         {
-            _context = context;
+            _dbSet = context.Set<T>();
         }
 
         public Task Add(T entity)
         {
-            _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            _dbSet.Add(entity);
 
             return Task.CompletedTask;
         }
 
         public void Add(IEnumerable<T> entities)
         {
-            _context.Set<T>().AddRange(entities);
-            _context.SaveChanges();
+            _dbSet.AddRange(entities);
         }
 
         public async Task<T[]> FindAsync(ISpecification<T> spec, CancellationToken cancellationToken, bool asNoTracking = false, string? includes = null)
         {
-            var query = asNoTracking ? _context.Set<T>().AsNoTracking() : _context.Set<T>();
+            var query = asNoTracking ? _dbSet.AsNoTracking() : _dbSet;
             query = query.Where(spec.Criteria);
 
             if(spec.OrderBy is not null)
@@ -49,44 +47,40 @@ namespace LT.dal.Access
 
         public ValueTask<T?> FindByIdAsync(long id, CancellationToken cancellationToken)
         {
-            return _context.Set<T>().FindAsync(new object[] { id }, cancellationToken);
+            return _dbSet.FindAsync(new object[] { id }, cancellationToken);
         }
 
         public List<T> Get()
         {
-            IQueryable<T> query = _context.Set<T>();
+            IQueryable<T> query = _dbSet;
             return query.ToList();
         }
 
         public Task<T[]> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false)
         {
-            IQueryable<T> query = _context.Set<T>();
+            IQueryable<T> query = _dbSet;
             return query.ToArrayAsync(cancellationToken);
         }
 
         public int Insert(T entity)
         {
-            _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            _dbSet.Add(entity);
             return entity.Id;
         }
 
         public void Remove(T entity)
         {
-            _context.Set<T>().Remove(entity);
-            _context.SaveChanges();
+            _dbSet.Remove(entity);
         }
 
         public void Remove(IEnumerable<T> entities)
         {
-            _context.Set<T>().RemoveRange(entities);
-            _context.SaveChanges();
+            _dbSet.RemoveRange(entities);
         }
 
         public Task Update(T entity)
         {
-            _context.Set<T>().Update(entity);
-            _context.SaveChanges();
+            _dbSet.Update(entity);
             return Task.CompletedTask;
         }
     }
