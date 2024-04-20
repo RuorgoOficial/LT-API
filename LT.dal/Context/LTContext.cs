@@ -14,10 +14,29 @@ namespace LT.dal.Context
 {
     public class LTDBContext : DbContext
     {
+        public DbSet<EntityTest> Test { get; set; }
+        public DbSet<EntityScore> Score { get; set; }
+
         public LTDBContext(DbContextOptions<LTDBContext> options) : base(options) { 
         }
 
-        public DbSet<EntityTest> Test { get; set; }
-        public DbSet<EntityScore> Score { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EntityTest>()
+                .Property(b => b.CreatedTimestamp)
+                .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<EntityTest>()
+                .Property(b => b.UpdatedTimestamp)
+                .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<EntityScore>()
+                .Property(b => b.CreatedTimestamp)
+                .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<EntityScore>()
+                .Property(b => b.UpdatedTimestamp)
+                .HasDefaultValueSql("GETDATE()");
+        }
     }
 }

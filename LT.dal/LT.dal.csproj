@@ -16,8 +16,4 @@
     <ProjectReference Include="..\LT.model\LT.model.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Logger\" />
-  </ItemGroup>
-
 </Project>

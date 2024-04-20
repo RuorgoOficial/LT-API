@@ -40,3 +40,8 @@ app.MapHealthChecks("/healthz");
 app.MapControllers();
 
 app.Run();
+
+public partial class Program()
+{
+
+}

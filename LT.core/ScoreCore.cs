@@ -1,4 +1,5 @@
-﻿using LT.dal.Access;
+﻿using LT.dal.Abstractions;
+using LT.dal.Access;
 using LT.dal.Context;
 using LT.model;
 using System;
@@ -12,10 +13,12 @@ namespace LT.core
     public class ScoreCore : BaseCore<BaseDal<EntityScore>,EntityScore>
     {
         private readonly BaseDal<EntityScore> _dal;
+        private readonly ILTUnitOfWork _unitOfWork;
 
-        public ScoreCore(LTDBContext context, BaseDal<EntityScore> dal) : base(dal) 
+        public ScoreCore(BaseDal<EntityScore> dal, ILTUnitOfWork unitOfWork) : base(dal) 
         {
             _dal = dal;
+            _unitOfWork = unitOfWork;
         }
         
         public override List<EntityScore> Get()
@@ -24,7 +27,8 @@ namespace LT.core
         }
         public override int Insert(EntityScore entity)
         {
-            return _dal.Insert(entity);
+            _dal.Insert(entity);
+            return _unitOfWork.SaveChanges();
         }
     }
 }

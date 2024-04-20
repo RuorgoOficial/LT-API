@@ -9,5 +9,6 @@ namespace LT.dal.Abstractions
     public interface ILTUnitOfWork
     {
         Task SaveChangesAsync(CancellationToken cancellationToken);
+        int SaveChanges();
     }
 }

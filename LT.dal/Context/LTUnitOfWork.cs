@@ -14,6 +14,12 @@ namespace LT.dal.Context
         {
             _dbContext = dbContext;
         }
+
+        public int SaveChanges()
+        {
+            return _dbContext.SaveChanges();
+        }
+
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
         {
             await _dbContext.SaveChangesAsync(cancellationToken);
