@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Threading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LT.model
 {
@@ -13,7 +14,7 @@ namespace LT.model
         public string? ExceptionStackTrace {get; set; } = string.Empty;
         public string? ExceptionSource {get; set; } = string.Empty;
 
-        public EntityError(string logLevel, int threadId, int eventId, string? eventName, string? exceptionMessage, string? exceptionStackTrace, string? exceptionSource)
+        private EntityError(string logLevel, int threadId, int eventId, string? eventName, string? exceptionMessage, string? exceptionStackTrace, string? exceptionSource)
         {
             LogLevel = logLevel;
             ThreadId = threadId;
@@ -23,5 +24,11 @@ namespace LT.model
             ExceptionStackTrace = exceptionStackTrace;
             ExceptionSource = exceptionSource;
         }
+
+        public static EntityError Create(string logLevel, int threadId, int eventId, string? eventName, string? exceptionMessage, string? exceptionStackTrace, string? exceptionSource)
+        {
+            return new EntityError(logLevel, threadId, eventId, eventName, exceptionMessage, exceptionStackTrace, exceptionSource);
+        }
+
     }
 }

@@ -7,6 +7,7 @@ using LT.dal;
 using LT.dal.Context;
 using LT.model;
 using LT.model.Commands.Queries;
+using LT.model.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ using System.Threading;
 
 namespace LT.api.Controllers.V2
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]    
     [ApiVersion(2)]
     [Route("api/v{v:apiVersion}/[controller]")]
@@ -45,6 +46,16 @@ namespace LT.api.Controllers.V2
         }
 
         [MapToApiVersion(2)]
+        [HttpGet("{id:int}")]
+        public async Task<IEnumerable<EntityScoreDto>> GetById(int id, CancellationToken cancellationToken)
+        {
+            _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
+
+            var query = new GetScoreQuery();
+            return await _mediator.Send(query, cancellationToken);
+        }
+
+        [MapToApiVersion(2)]
         [HttpPost]
         public async Task<int> Insert(EntityScoreDto entity, CancellationToken cancellationToken)
         {
@@ -63,9 +74,12 @@ namespace LT.api.Controllers.V2
         }
         [MapToApiVersion(2)]
         [HttpDelete]
-        public int Delete(EntityScoreDto entity)
+        public async Task<int> Delete(EntityScoreDto entity, CancellationToken cancellationToken)
         {
-            return 0;
+            _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
+
+            var query = new DeleteScoreQuery(entity);
+            return await _mediator.Send(query, cancellationToken);
         }
         [MapToApiVersion(2)]
         [HttpPatch]

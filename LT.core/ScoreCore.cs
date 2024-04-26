@@ -2,6 +2,7 @@
 using LT.dal.Access;
 using LT.dal.Context;
 using LT.model;
+using LT.model.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,17 @@ namespace LT.core
             _dal = dal;
             _unitOfWork = unitOfWork;
         }
-        
+
         public override List<EntityScore> Get()
         {
             return _dal.Get();
+        }
+        public override EntityScore GetById(int id)
+        {
+            var entity = _dal.GetById(id);
+            if (entity is null)
+                throw new ScoreNotFoundException("Score not found");
+            return entity;
         }
         public override int Insert(EntityScore entity)
         {

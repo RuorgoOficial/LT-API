@@ -29,7 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LT.core\LT.core.csproj" />
+    <ProjectReference Include="..\LT.dal\LT.dal.csproj" />
     <ProjectReference Include="..\LT.model\LT.model.csproj" />
   </ItemGroup>
 

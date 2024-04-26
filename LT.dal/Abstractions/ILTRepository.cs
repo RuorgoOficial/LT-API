@@ -11,7 +11,7 @@ namespace LT.dal.Abstractions
     {
         Task Add(T entity);
         void Add(IEnumerable<T> entities);
-        void Remove(T entity);
+        Task Remove(T entity);
         void Remove(IEnumerable<T> entities);
         Task Update(T entity);
         ValueTask<T?> FindByIdAsync(long id, CancellationToken cancellationToken);

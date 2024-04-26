@@ -22,6 +22,10 @@ namespace LT.core
         {
             return _dal.Get();
         }
+        public virtual E GetById(int id)
+        {
+            return _dal.GetById(id);
+        }
         public virtual int Insert(E entity)
         {
             return _dal.Insert(entity);

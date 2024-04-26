@@ -10,6 +10,9 @@ using Moq;
 using System.Threading;
 using Microsoft.AspNetCore.Components.Forms;
 using LT.core.Handlers.Score;
+using AutoMapper;
+using LT.api.Configure;
+using Microsoft.EntityFrameworkCore;
 
 namespace LT.Integration.Test
 {
@@ -20,6 +23,7 @@ namespace LT.Integration.Test
         private readonly LTWebApplicationFactory _factory;
         private readonly Fixture _fixture;
         private readonly ScoreCore _scoreCore;
+        private readonly IMapper _mapper;
 
         public ScoreTest(DatabaseFixture database, LTWebApplicationFactory factory)
         {
@@ -29,6 +33,12 @@ namespace LT.Integration.Test
 
             var dbContext = _database.CreateDBContext();
             _scoreCore = new ScoreCore(new dal.Access.BaseDal<EntityScore>(dbContext), new LTUnitOfWork(dbContext));
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            _mapper = mapperConfig.CreateMapper();
         }
         [Fact]
         public async Task TestInsert_Score()
@@ -67,8 +77,11 @@ namespace LT.Integration.Test
             ok.Should().BeTrue();
         }
         [Fact]
-        public void TestInsert_Score_Through_Handler()
+        public async Task TestInsert_Score_Through_Handler()
         {
+            var dbContext = _database.CreateDBContext();
+            var handler = new ScoreQueryHandler(new dal.Access.BaseDal<EntityScore>(dbContext), _mapper, new LTUnitOfWork(dbContext));
+
             var entity = _fixture.Build<EntityScoreDto>().Without(x => x.Id)
                 .With(x => x.Score, 9.1M)
                 .With(x => x.Acronym, "RUB")
@@ -76,11 +89,12 @@ namespace LT.Integration.Test
                 .With(x => x.UpdatedTimestamp, DateTime.UtcNow)
                 .Create();
 
-            //var id = _scoreCore.Insert(entity);
+            var query = new InsertScoreQuery(entity);
+            var id = await handler.Handle(query, CancellationToken.None);
 
-            //var ok = id > 0;
+            var ok = id > 0;
 
-            //ok.Should().BeTrue();
+            ok.Should().BeTrue();
         }
     }
 }

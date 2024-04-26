@@ -21,12 +21,6 @@ namespace LT.dal.Context.Mappings
             modelBuilder.Property(b => b.UpdatedTimestamp)
                 .HasDefaultValueSql("GETDATE()");
 
-            modelBuilder.Property(b => b.CreatedTimestamp)
-                .HasDefaultValueSql("GETDATE()");
-
-            modelBuilder.Property(b => b.UpdatedTimestamp)
-                .HasDefaultValueSql("GETDATE()");
-
             ConfigureEntity(modelBuilder);
         }
 

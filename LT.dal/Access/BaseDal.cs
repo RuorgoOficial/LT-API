@@ -11,13 +11,9 @@ using System.Threading.Tasks;
 
 namespace LT.dal.Access
 {
-    public class BaseDal<T> : ILTRepository<T> where T : EntityBase
+    public class BaseDal<T>(LTDBContext context) : ILTRepository<T> where T : EntityBase
     {
-        private readonly DbSet<T> _dbSet;
-        public BaseDal(LTDBContext context)
-        {
-            _dbSet = context.Set<T>();
-        }
+        private readonly DbSet<T> _dbSet = context.Set<T>();
 
         public Task Add(T entity)
         {
@@ -55,6 +51,11 @@ namespace LT.dal.Access
             IQueryable<T> query = _dbSet;
             return query.ToList();
         }
+        public T? GetById(int id)
+        {
+            IQueryable<T> query = _dbSet;
+            return query.FirstOrDefault(e => e.Id == id);
+        }
 
         public Task<T[]> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false)
         {
@@ -68,9 +69,10 @@ namespace LT.dal.Access
             return entity.Id;
         }
 
-        public void Remove(T entity)
+        public Task Remove(T entity)
         {
             _dbSet.Remove(entity);
+            return Task.CompletedTask;
         }
 
         public void Remove(IEnumerable<T> entities)

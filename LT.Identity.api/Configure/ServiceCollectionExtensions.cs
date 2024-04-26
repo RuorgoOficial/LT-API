@@ -1,7 +1,5 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
-using LT.api.Controllers;
-using LT.api.Metrics;
 using LT.core.Services;
 using LT.dal;
 using LT.dal.Abstractions;
@@ -9,17 +7,20 @@ using LT.dal.Access;
 using LT.dal.Context;
 using LT.model;
 using LT.model.Abstractions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using OpenTelemetry.Metrics;
 using System.Data.Common;
 using System.Reflection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace LT.api.Configure
+namespace LT.Identity.api.Configure
 {
     public static class ServiceCollectionExtensions
     {
@@ -48,10 +49,8 @@ namespace LT.api.Configure
             return services;
         }
         public static IServiceCollection AddIdentity(
-             this IServiceCollection services, IConfiguration configuration)
+             this IServiceCollection services)
         {
-            var identityUrl = configuration.GetValue<string>("IdentityUrl");
-
             services.AddAuthorization();
             services.AddIdentityApiEndpoints<IdentityUser>(opt =>
             {
@@ -60,21 +59,27 @@ namespace LT.api.Configure
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.SignIn.RequireConfirmedEmail = false;
             })
-                    .AddDefaultUI()
-                    .AddEntityFrameworkStores<IdentityDbContext>()
-                    .AddDefaultTokenProviders();
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddDefaultTokenProviders();
 
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            //}).AddJwtBearer(options =>
-            //{
-            //    options.Authority = identityUrl;
-            //    options.RequireHttpsMetadata = false;
-            //    options.Audience = "LT";
-            //});
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+           .AddJwtBearer(x =>
+           {
+               x.RequireHttpsMetadata = false;
+               x.SaveToken = true;
+               x.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateIssuerSigningKey = true,
+                   //IssuerSigningKey = new SymmetricSecurityKey("LT"),
+                   ValidateIssuer = false,
+                   ValidateAudience = false
+               };
+           });
 
             return services;
         }
@@ -114,18 +119,6 @@ namespace LT.api.Configure
                 options.GroupNameFormat = "'v'V";
                 options.SubstituteApiVersionInUrl = true;
             });
-            return services;
-        }
-        public static IServiceCollection AddAutoMapper(
-             this IServiceCollection services)
-        {
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
             return services;
         }
         public static IServiceCollection AddMediatRAssemblies(this IServiceCollection services)
