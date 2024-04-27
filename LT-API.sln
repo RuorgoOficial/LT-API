@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{3FF6FEC1-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LT.Integration.Test", "LT.Integration.Test\LT.Integration.Test.csproj", "{FA52E91F-1C1A-4B3E-B657-13F616BC7501}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LT.Identity.api", "LT.Identity.api\LT.Identity.api.csproj", "{979F657B-93BD-41C9-9C59-4E25EEE1B301}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{FA52E91F-1C1A-4B3E-B657-13F616BC7501}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA52E91F-1C1A-4B3E-B657-13F616BC7501}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA52E91F-1C1A-4B3E-B657-13F616BC7501}.Release|Any CPU.Build.0 = Release|Any CPU
-		{979F657B-93BD-41C9-9C59-4E25EEE1B301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{979F657B-93BD-41C9-9C59-4E25EEE1B301}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{979F657B-93BD-41C9-9C59-4E25EEE1B301}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{979F657B-93BD-41C9-9C59-4E25EEE1B301}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,7 +62,6 @@ Global
 		{910DEEA1-EB77-4347-8884-80D9E4D183EC} = {DF4DF0EA-CA1E-4449-8223-80E2733BA22F}
 		{E6B8797A-6802-4F27-8093-4F2BC849299B} = {DF4DF0EA-CA1E-4449-8223-80E2733BA22F}
 		{FA52E91F-1C1A-4B3E-B657-13F616BC7501} = {3FF6FEC1-7305-4682-9A54-E71DEF252647}
-		{979F657B-93BD-41C9-9C59-4E25EEE1B301} = {DF4DF0EA-CA1E-4449-8223-80E2733BA22F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C68E94B8-13A7-4E48-87EE-D7A4C7E933E1}

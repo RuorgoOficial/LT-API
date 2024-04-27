@@ -155,5 +155,10 @@ namespace LT.Integration.Test
         {
             throw new NotImplementedException();
         }
+
+        Task ILTRepository<EntityBase>.Remove(EntityBase entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

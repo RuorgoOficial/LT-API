@@ -22,7 +22,7 @@ namespace LT.core
         {
             return _dal.Get();
         }
-        public virtual E GetById(int id)
+        public virtual E? GetById(int id)
         {
             return _dal.GetById(id);
         }
