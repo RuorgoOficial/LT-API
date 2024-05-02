@@ -28,6 +28,32 @@ namespace LT.api.Configure
                 options.SwaggerDoc(
                     description.GroupName,
                     CreateVersionInfo(description));
+                
+                options.AddSecurityDefinition($"Security{description.GroupName}", new OpenApiSecurityScheme
+                {
+                    Description = @"Enter 'Bearer' [space] and your token",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "Bearer",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });
             }
         }
 

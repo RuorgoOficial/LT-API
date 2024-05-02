@@ -9,8 +9,6 @@ using OpenTelemetry.Metrics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(VersionExtensions).Assembly); });
 builder.Services.AddMediatRAssemblies();
 builder.Services.AddControllers();
 builder.Services.AddCore();

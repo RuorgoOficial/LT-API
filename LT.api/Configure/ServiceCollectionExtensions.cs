@@ -50,8 +50,6 @@ namespace LT.api.Configure
         public static IServiceCollection AddIdentity(
              this IServiceCollection services, IConfiguration configuration)
         {
-            var identityUrl = configuration.GetValue<string>("IdentityUrl");
-
             services.AddAuthorization();
             services.AddIdentityApiEndpoints<IdentityUser>(opt =>
             {
