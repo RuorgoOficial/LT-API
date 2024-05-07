@@ -89,7 +89,7 @@ namespace LT.Integration.Test
                 .With(x => x.UpdatedTimestamp, DateTime.UtcNow)
                 .Create();
 
-            var query = new InsertScoreQuery(entity);
+            var query = new InsertCommand<EntityScoreDto>(entity);
             var id = await handler.Handle(query, CancellationToken.None);
 
             var ok = id > 0;

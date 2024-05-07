@@ -41,7 +41,7 @@ namespace LT.api.Controllers.V2
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
 
-            var query = new GetScoreQuery();
+            var query = new GetQuery<EntityScoreDto>();
             return await _mediator.Send(query, cancellationToken);
         }
 
@@ -51,7 +51,7 @@ namespace LT.api.Controllers.V2
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
 
-            var query = new GetScoreQuery();
+            var query = new GetQuery<EntityScoreDto>();
             return await _mediator.Send(query, cancellationToken);
         }
 
@@ -60,7 +60,7 @@ namespace LT.api.Controllers.V2
         public async Task<int> Insert(EntityScoreDto entity, CancellationToken cancellationToken)
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
-            var query = new InsertScoreQuery(entity);
+            var query = new InsertCommand<EntityScoreDto>(entity);
             return await _mediator.Send(query, cancellationToken);
         }
         [MapToApiVersion(2)]
@@ -69,7 +69,7 @@ namespace LT.api.Controllers.V2
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
 
-            var query = new UpdateScoreQuery(entity);
+            var query = new UpdateCommand<EntityScoreDto>(entity);
             return await _mediator.Send(query, cancellationToken);
         }
         [MapToApiVersion(2)]
@@ -78,7 +78,7 @@ namespace LT.api.Controllers.V2
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
 
-            var query = new DeleteScoreQuery(entity);
+            var query = new DeleteCommand<EntityScoreDto>(entity);
             return await _mediator.Send(query, cancellationToken);
         }
         [MapToApiVersion(2)]
@@ -87,7 +87,7 @@ namespace LT.api.Controllers.V2
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
 
-            var query = new UpdateScoreQuery(entity);
+            var query = new UpdateCommand<EntityScoreDto>(entity);
             return await _mediator.Send(query, cancellationToken);
         }
     }

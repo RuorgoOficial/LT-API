@@ -1,40 +1,21 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
-using LT.api.Controllers;
-using LT.api.Metrics;
-using LT.core.Services;
-using LT.dal;
-using LT.dal.Abstractions;
-using LT.dal.Access;
 using LT.dal.Context;
-using LT.model;
-using LT.model.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging.Configuration;
-using OpenTelemetry.Metrics;
-using System.Data.Common;
-using System.Reflection;
+using LT.core.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LT.model;
+using LT.dal.Abstractions;
+using LT.dal.Access;
 
-namespace LT.api.Configure
+namespace Identity.api.Configure
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCore(
-             this IServiceCollection services)
-        {
-            services.AddScoped<core.BaseCore<ScoreDal, EntityScore>>();
-            services.AddScoped<core.BaseCore<TestDal, EntityTest>>();
-            services.AddScoped<core.ScoreCore>();
-            services.AddScoped<core.TestCore>();
-
-            return services;
-        }
         public static IServiceCollection AddDal(
              this IServiceCollection services)
         {
@@ -57,27 +38,29 @@ namespace LT.api.Configure
                 .AddDefaultTokenProviders()
                 .AddDefaultUI();
 
+            // Adding Authentication
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(jwtOptions =>
+            // Adding Jwt Bearer
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    jwtOptions.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                    {
-                        ValidIssuer = configuration["JwtSettings:Issuer"],
-                        ValidAudience = configuration["JwtSettings:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!)),
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true
-                    };
-                });
-
-            services.AddAuthorization();
+                    ValidIssuer = configuration["JwtSettings:Issuer"],
+                    ValidAudience = configuration["JwtSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!)),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true
+                };
+            });
 
             return services;
         }
