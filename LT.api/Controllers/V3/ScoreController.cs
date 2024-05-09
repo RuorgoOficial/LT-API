@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using AutoMapper;
+using LT.api.Contracts;
 using LT.api.Metrics;
 using LT.core;
 using LT.core.Handlers.Score;
@@ -44,8 +45,8 @@ namespace LT.api.Controllers.V3
             var response = await _mediator.Send(query, cancellationToken);
 
             return response.Match<IActionResult>(
-                m => CreatedAtAction(nameof(Get), null, m),
-                failed => BadRequest(failed)
+                m => CreatedAtAction(nameof(Get), null, ResponseBuilder.Build(m)),
+                failed => BadRequest(ResponseBuilder.Build(failed))
                 );
         }
     }

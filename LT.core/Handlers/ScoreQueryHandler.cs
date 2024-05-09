@@ -21,7 +21,7 @@ namespace LT.core.Handlers
         IRequestHandler<UpdateCommand<EntityScoreDto>, int>,
         IRequestHandler<DeleteCommand<EntityScoreDto>, int>,
         IRequestHandler<GetQuery<EntityScoreDto>, IEnumerable<EntityScoreDto>>,
-        IRequestHandler<GetScoreQuery, Result<IEnumerable<EntityScoreDto>, EntityErrorDto>>
+        IRequestHandler<GetScoreQuery, Result<IEnumerable<EntityScoreDto>, EntityErrorResponseDto<string>>>
     {
         private readonly BaseDal<EntityScore> _dal = dal;
         private readonly IMapper _mapper = mapper;
@@ -53,12 +53,12 @@ namespace LT.core.Handlers
             return entities.Select(e => _mapper.Map<EntityScoreDto>(e));
         }
 
-        public async Task<Result<IEnumerable<EntityScoreDto>, EntityErrorDto>> Handle(GetScoreQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<EntityScoreDto>, EntityErrorResponseDto<string>>> Handle(GetScoreQuery request, CancellationToken cancellationToken)
         {
             var entities = await _dal.GetAllAsync(cancellationToken);
             var threadId = Thread.CurrentThread.ManagedThreadId;
             if (entities.Count() == 0)
-                return new EntityErrorDto(LogLevel.Information.ToString(), threadId, 0, nameof(Handle), $"Entity not found", null, null);
+                return new EntityErrorResponseDto<string>($"Entity not found");
             var returnEntities = entities.Select(e => _mapper.Map<EntityScoreDto>(e)).ToList();
             return returnEntities;
         }
