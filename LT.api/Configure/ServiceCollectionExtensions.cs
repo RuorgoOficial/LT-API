@@ -153,6 +153,8 @@ namespace LT.api.Configure
             services.AddSingleton(new LTUnitOfWork(context));
             services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 
+            services.AddScoped<IMessageBus, AzureServiceBusMessageBus>();
+
             return services;
         }
 

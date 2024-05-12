@@ -1,6 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
 using LT.model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,26 +13,29 @@ namespace LT.messageBus
 {
     public class AzureServiceBusMessageBus : IMessageBus
     {
-        private readonly string _connectionString;
+        private readonly string? _connectionString;
 
-        public AzureServiceBusMessageBus(string connectionString)
+        public AzureServiceBusMessageBus(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _connectionString = configuration.GetConnectionString("ServiceBusConnectionString");
         }
 
-        public async Task PublishMessage(BaseMessage message, string topicName)
+        public async Task PublishMessage(EntityBase message, string topicName)
         {
-            await using var client = new ServiceBusClient(_connectionString);
-            ServiceBusSender sender = client.CreateSender(topicName);
+            if(_connectionString != null)
+            {
+                await using var client = new ServiceBusClient(_connectionString);
+                ServiceBusSender sender = client.CreateSender(topicName);
 
-            var jsonMessage = JsonConvert.SerializeObject(message);
-            ServiceBusMessage finalMessage = new ServiceBusMessage(Encoding.UTF8.GetBytes(jsonMessage))
-            { 
-                CorrelationId = Guid.NewGuid().ToString()
-            };
+                var jsonMessage = JsonConvert.SerializeObject(message);
+                ServiceBusMessage finalMessage = new ServiceBusMessage(Encoding.UTF8.GetBytes(jsonMessage))
+                {
+                    CorrelationId = Guid.NewGuid().ToString()
+                };
 
-            await sender.SendMessageAsync(finalMessage);
-            await client.DisposeAsync();
+                await sender.SendMessageAsync(finalMessage);
+                await client.DisposeAsync();
+            }
         }
     }
 }

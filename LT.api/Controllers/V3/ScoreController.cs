@@ -49,5 +49,15 @@ namespace LT.api.Controllers.V3
                 failed => BadRequest(ResponseBuilder.Build(failed))
                 );
         }
+
+        [MapToApiVersion(3)]
+        [HttpPost]
+        public async Task<bool> Insert(EntityScoreDto entity, CancellationToken cancellationToken)
+        {
+            _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
+            var query = new InsertServiceBusCommand<EntityScoreDto>(entity);
+            await _mediator.Send(query, cancellationToken);
+            return true;
+        }
     }
 }

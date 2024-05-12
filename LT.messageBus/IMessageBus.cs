@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LT.model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace LT.messageBus
 {
     public interface IMessageBus
     {
-        Task PublishMessage(BaseMessage message, string topicName);
+        Task PublishMessage(EntityBase message, string topicName);
     }
 }
