@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LT.core\LT.core.csproj" />
+    <ProjectReference Include="..\LT.messageBus\LT.messageBus.csproj" />
     <ProjectReference Include="..\LT.model\LT.model.csproj" />
   </ItemGroup>
 

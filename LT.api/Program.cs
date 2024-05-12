@@ -19,6 +19,7 @@ builder.Services.AddConfig(builder.Configuration);
 builder.AddOpenTelemetryHealthChecks();
 builder.Services.AddApiVersioningService();
 builder.Services.AddAutoMapper();
+//builder.Services.AddServiceBusConsumer(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 //builder.Services.AddEndpointsApiExplorer();
@@ -41,6 +42,8 @@ app.MapHealthChecks("/healthz");
 
 app.MapControllers();
 app.UseMiddleware<ErrorHandlerMiddleware>();
+
+//app.AddServiceBusConsumer();
 
 app.Run();
 

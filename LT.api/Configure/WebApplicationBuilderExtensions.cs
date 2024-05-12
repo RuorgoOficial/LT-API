@@ -1,5 +1,7 @@
 ﻿using LT.api.Metrics;
 using LT.dal.Context;
+using LT.messageBus;
+using Microsoft.IdentityModel.Tokens;
 using OpenTelemetry.Metrics;
 
 namespace LT.api.Configure

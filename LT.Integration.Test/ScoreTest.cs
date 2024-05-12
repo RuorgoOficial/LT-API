@@ -13,6 +13,7 @@ using LT.core.Handlers.Score;
 using AutoMapper;
 using LT.api.Configure;
 using Microsoft.EntityFrameworkCore;
+using LT.core.Handlers;
 
 namespace LT.Integration.Test
 {

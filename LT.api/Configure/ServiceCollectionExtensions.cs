@@ -20,6 +20,8 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LT.messageBus;
+using System.Net.Security;
 
 namespace LT.api.Configure
 {
@@ -137,6 +139,19 @@ namespace LT.api.Configure
         public static IServiceCollection AddMediatRAssemblies(this IServiceCollection services)
         {
             services.AddApplication();
+
+            return services;
+        }
+
+        public static IServiceCollection AddServiceBusConsumer(this IServiceCollection services, IConfiguration configuration)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<LTDBContext>();
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("LTContext"));
+
+            var context = new LTDBContext(optionsBuilder.Options);
+            services.AddSingleton(new ScoreDal(context));
+            services.AddSingleton(new LTUnitOfWork(context));
+            services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 
             return services;
         }
