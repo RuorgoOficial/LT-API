@@ -51,6 +51,16 @@ namespace LT.api.Controllers.V3
         }
 
         [MapToApiVersion(3)]
+        [HttpGet("{id:int}")]
+        public async Task<EntityScoreDto> GetById(int id, CancellationToken cancellationToken)
+        {
+            _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
+
+            var query = new GetHttpQuery<EntityScoreDto>(id);
+            return await _mediator.Send(query, cancellationToken);
+        }
+
+        [MapToApiVersion(3)]
         [HttpPost]
         public async Task<bool> Insert(EntityScoreDto entity, CancellationToken cancellationToken)
         {

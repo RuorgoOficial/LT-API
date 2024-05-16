@@ -158,5 +158,15 @@ namespace LT.api.Configure
             return services;
         }
 
+        public static IServiceCollection AddHttpClient(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IHttpRepository<EntityScoreDto>, ScoreHttpRepository>();
+            services.AddHttpClient<IHttpRepository<EntityScoreDto>, ScoreHttpRepository>(u => 
+                u.BaseAddress = new Uri(configuration["ServiceUrls:ScoreApi"]!)
+            );
+
+            return services;
+        }
+
     }
 }

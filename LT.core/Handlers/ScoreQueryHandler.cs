@@ -17,18 +17,20 @@ using System.Threading.Tasks;
 
 namespace LT.core.Handlers
 {
-    public class ScoreQueryHandler(BaseDal<EntityScore> dal, IMapper mapper, ILTUnitOfWork unitOfWork, IMessageBus messageBus) :
+    public class ScoreQueryHandler(BaseDal<EntityScore> dal, IMapper mapper, ILTUnitOfWork unitOfWork, IMessageBus messageBus, IHttpRepository<EntityScoreDto> httpRepository) :
         IRequestHandler<InsertCommand<EntityScoreDto>, int>,
         IRequestHandler<InsertServiceBusCommand<EntityScoreDto>>,
         IRequestHandler<UpdateCommand<EntityScoreDto>, int>,
         IRequestHandler<DeleteCommand<EntityScoreDto>, int>,
         IRequestHandler<GetQuery<EntityScoreDto>, IEnumerable<EntityScoreDto>>,
+        IRequestHandler<GetHttpQuery<EntityScoreDto>, EntityScoreDto>,
         IRequestHandler<GetScoreQuery, Result<IEnumerable<EntityScoreDto>, EntityErrorResponseDto<string>>>
     {
         private readonly BaseDal<EntityScore> _dal = dal;
         private readonly IMapper _mapper = mapper;
         private readonly ILTUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMessageBus _messageBus = messageBus;
+        private readonly IHttpRepository<EntityScoreDto> _httpRepository = httpRepository;
 
         public async Task<int> Handle(InsertCommand<EntityScoreDto> request, CancellationToken cancellationToken)
         {
@@ -68,6 +70,11 @@ namespace LT.core.Handlers
                 return new EntityErrorResponseDto<string>($"Entity not found");
             var returnEntities = entities.Select(e => _mapper.Map<EntityScoreDto>(e)).ToList();
             return returnEntities;
+        }
+        public async Task<EntityScoreDto> Handle(GetHttpQuery<EntityScoreDto> request, CancellationToken cancellationToken)
+        {
+            var entity = await _httpRepository.GetAsync(request.GetId());
+            return entity;
         }
     }
 }

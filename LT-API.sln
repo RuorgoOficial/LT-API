@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.api", "Identity.ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{DAE7A545-683D-491F-9206-EB1036F5D493}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LT.messageBus", "LT.messageBus\LT.messageBus.csproj", "{20F9664B-8971-4C30-98EE-ADF6D9CD10D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LT.messageBus", "LT.messageBus\LT.messageBus.csproj", "{20F9664B-8971-4C30-98EE-ADF6D9CD10D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
