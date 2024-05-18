@@ -20,6 +20,7 @@ builder.AddOpenTelemetryHealthChecks();
 builder.Services.AddApiVersioningService();
 builder.Services.AddAutoMapper();
 builder.Services.AddServiceBusConsumer(builder.Configuration);
+builder.Services.AddRabbitMQSender(builder.Configuration);
 builder.Services.AddHttpClient(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

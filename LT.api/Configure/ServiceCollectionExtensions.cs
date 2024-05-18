@@ -22,6 +22,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LT.messageBus;
 using System.Net.Security;
+using LT.core.RabbitMQSender;
+using LT.core.RabbitMQConsumer;
 
 namespace LT.api.Configure
 {
@@ -154,6 +156,14 @@ namespace LT.api.Configure
             services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 
             services.AddScoped<IMessageBus, AzureServiceBusMessageBus>();
+
+            return services;
+        }
+        public static IServiceCollection AddRabbitMQSender(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
+            
+            services.AddHostedService<RabbitMQConsumer<EntityScoreDto>>();
 
             return services;
         }

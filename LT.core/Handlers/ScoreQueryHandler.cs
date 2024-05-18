@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Core;
+using LT.core.RabbitMQSender;
 using LT.dal.Abstractions;
 using LT.dal.Access;
 using LT.dal.Context;
@@ -7,6 +8,7 @@ using LT.messageBus;
 using LT.model;
 using LT.model.Commands.Queries;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,15 @@ using System.Threading.Tasks;
 
 namespace LT.core.Handlers
 {
-    public class ScoreQueryHandler(BaseDal<EntityScore> dal, IMapper mapper, ILTUnitOfWork unitOfWork, IMessageBus messageBus, IHttpRepository<EntityScoreDto> httpRepository) :
+    public class ScoreQueryHandler(
+            BaseDal<EntityScore> dal, 
+            IMapper mapper, 
+            ILTUnitOfWork unitOfWork, 
+            IMessageBus messageBus, 
+            IHttpRepository<EntityScoreDto> httpRepository,
+            IRabbitMQMessageSender rabbitMQScoreMessageSender,
+            IConfiguration configuration
+        ) :
         IRequestHandler<InsertCommand<EntityScoreDto>, int>,
         IRequestHandler<InsertServiceBusCommand<EntityScoreDto>>,
         IRequestHandler<UpdateCommand<EntityScoreDto>, int>,
@@ -31,6 +41,8 @@ namespace LT.core.Handlers
         private readonly ILTUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMessageBus _messageBus = messageBus;
         private readonly IHttpRepository<EntityScoreDto> _httpRepository = httpRepository;
+        private readonly IRabbitMQMessageSender _rabbitMQScoreMessageSender = rabbitMQScoreMessageSender;
+        private readonly IConfiguration _configuration = configuration;
 
         public async Task<int> Handle(InsertCommand<EntityScoreDto> request, CancellationToken cancellationToken)
         {
@@ -40,8 +52,9 @@ namespace LT.core.Handlers
         }
         public async Task Handle(InsertServiceBusCommand<EntityScoreDto> request, CancellationToken cancellationToken)
         {
-            var entity = _mapper.Map<EntityScore>(request.GetEntity());
-            await _messageBus.PublishMessage(entity, "");
+            var queueName = _configuration.GetSection("RabbitMQSettings:ScoreQueueName").Value;
+            _rabbitMQScoreMessageSender.SendMessage(request.GetEntity(), queueName!);
+            await Task.CompletedTask;
         }
         public async Task<int> Handle(UpdateCommand<EntityScoreDto> request, CancellationToken cancellationToken)
         {
