@@ -94,6 +94,9 @@ namespace LT.api.Configure
             services.Configure<JwtSettings>(configuration);
             services.AddScoped<JwtSettings>();
 
+            services.Configure<RabbitMQSettings>(configuration);
+            services.AddScoped<RabbitMQSettings>();
+
             services.Configure<AppSettings>(configuration);
             services.AddScoped<AppSettings>();
 
