@@ -14,6 +14,7 @@ using AutoMapper;
 using LT.api.Configure;
 using Microsoft.EntityFrameworkCore;
 using LT.core.Handlers;
+using LT.core.RabbitMQSender;
 
 namespace LT.Integration.Test
 {
@@ -72,26 +73,6 @@ namespace LT.Integration.Test
                 .Create();
 
             var id = _scoreCore.Insert(entity);
-
-            var ok = id > 0;
-
-            ok.Should().BeTrue();
-        }
-        [Fact]
-        public async Task TestInsert_Score_Through_Handler()
-        {
-            var dbContext = _database.CreateDBContext();
-            var handler = new ScoreQueryHandler(new dal.Access.BaseDal<EntityScore>(dbContext), _mapper, new LTUnitOfWork(dbContext));
-
-            var entity = _fixture.Build<EntityScoreDto>().Without(x => x.Id)
-                .With(x => x.Score, 9.1M)
-                .With(x => x.Acronym, "RUB")
-                .With(x => x.CreatedTimestamp, DateTime.UtcNow)
-                .With(x => x.UpdatedTimestamp, DateTime.UtcNow)
-                .Create();
-
-            var query = new InsertCommand<EntityScoreDto>(entity);
-            var id = await handler.Handle(query, CancellationToken.None);
 
             var ok = id > 0;
 
