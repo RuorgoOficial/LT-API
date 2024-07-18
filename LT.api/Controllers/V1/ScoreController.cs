@@ -18,10 +18,12 @@ namespace LT.api.Controllers.V1
     [ApiController]
     [ApiVersion(1, Deprecated = true)]
     [Route("api/v{v:apiVersion}/[controller]")]
+    [Obsolete]
     public class ScoreController(ILogger<ScoreController> logger, AppSettings appSettings, ScoreCore core, GetMetrics metrics, IMapper mapper) : ControllerBase
     {
         private readonly ILogger<ScoreController> _logger = logger;
         private readonly AppSettings _appSettings = appSettings;
+        [Obsolete]
         private readonly ScoreCore _core = core;
         private readonly GetMetrics _metrics = metrics;
         private readonly IMapper _mapper = mapper;
@@ -29,6 +31,7 @@ namespace LT.api.Controllers.V1
         //Get
         [MapToApiVersion(1)]
         [HttpGet]
+        [Obsolete("Use v2 or higger instead")]
         public IEnumerable<EntityScoreDto> Get()
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
@@ -36,6 +39,7 @@ namespace LT.api.Controllers.V1
         }
         [MapToApiVersion(1)]
         [HttpGet("{id:int}")]
+        [Obsolete("Use v2 or higger instead")]
         public EntityScoreDto GetById(int id, CancellationToken cancellationToken)
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
@@ -44,6 +48,7 @@ namespace LT.api.Controllers.V1
 
         [HttpPost]
         [MapToApiVersion(1)]
+        [Obsolete("Use v2 or higger instead")]
         public int Insert(EntityScoreDto test)
         {
             var testCoreEntity = _mapper.Map<EntityScore>(test);
@@ -51,6 +56,7 @@ namespace LT.api.Controllers.V1
         }
         [HttpPut]
         [MapToApiVersion(1)]
+        [Obsolete("Use v2 or higger instead")]
         public int Update(EntityScoreDto test)
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
@@ -58,12 +64,14 @@ namespace LT.api.Controllers.V1
         }
         [HttpDelete]
         [MapToApiVersion(1)]
+        [Obsolete("Use v2 or higger instead")]
         public int Delete(EntityScoreDto test)
         {
             return 0;
         }
         [HttpPatch]
         [MapToApiVersion(1)]
+        [Obsolete("Use v2 or higger instead")]
         public int Patch(EntityScoreDto test)
         {
             return 0;

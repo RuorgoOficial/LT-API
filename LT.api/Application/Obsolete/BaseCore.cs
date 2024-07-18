@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace LT.core
 {
+    [Obsolete("This class is obsolete. You should use the handler instead.")]
     public class BaseCore <D, E> where D: BaseDal<E> where E : EntityBase
     {
         private readonly D _dal;

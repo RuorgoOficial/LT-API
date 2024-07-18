@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace LT.core
 {
+    [Obsolete("This class is obsolete. You should use the handler instead.")]
     public class ScoreCore : BaseCore<BaseDal<EntityScore>,EntityScore>
     {
         private readonly BaseDal<EntityScore> _dal;

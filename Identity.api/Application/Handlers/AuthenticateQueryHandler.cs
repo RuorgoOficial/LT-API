@@ -18,12 +18,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LT.core.Handlers.Score
+namespace LT.api.Application.Handlers
 {
     public class AuthenticateQueryHandler(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            AppSettings appSettings) : 
+            AppSettings appSettings) :
         IRequestHandler<AuthenticateQuery, Result<JwtSecurityToken, EntityErrorDto>>
     {
         private readonly UserManager<IdentityUser> _userManager = userManager;

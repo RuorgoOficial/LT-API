@@ -2,7 +2,7 @@
 using AutoMapper;
 using LT.api.Controllers;
 using LT.api.Metrics;
-using LT.core.Services;
+using LT.api.Services;
 using LT.dal;
 using LT.dal.Abstractions;
 using LT.dal.Access;
@@ -32,10 +32,10 @@ namespace LT.api.Configure
         public static IServiceCollection AddCore(
              this IServiceCollection services)
         {
-            services.AddScoped<core.BaseCore<ScoreDal, EntityScore>>();
-            services.AddScoped<core.BaseCore<TestDal, EntityTest>>();
-            services.AddScoped<core.ScoreCore>();
-            services.AddScoped<core.TestCore>();
+            //services.AddScoped<core.BaseCore<ScoreDal, EntityScore>>();
+            //services.AddScoped<core.BaseCore<TestDal, EntityTest>>();
+            //services.AddScoped<core.ScoreCore>();
+            //services.AddScoped<core.TestCore>();
 
             return services;
         }

@@ -2,7 +2,6 @@ using Asp.Versioning;
 using AutoMapper;
 using LT.api.Metrics;
 using LT.core;
-using LT.core.Handlers.Score;
 using LT.dal;
 using LT.dal.Context;
 using LT.model;
@@ -17,7 +16,7 @@ using System.Threading;
 
 namespace LT.api.Controllers.V2
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]    
     [ApiVersion(2)]
     [Route("api/v{v:apiVersion}/[controller]")]

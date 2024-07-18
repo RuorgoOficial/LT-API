@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LT.core.Services
+namespace LT.api.Services
 {
     public static class VersionExtensions
     {

@@ -1,23 +1,15 @@
 using Asp.Versioning;
-using AutoMapper;
 using LT.api.Contracts;
 using LT.api.Metrics;
-using LT.core;
-using LT.core.Handlers.Score;
-using LT.dal;
-using LT.dal.Context;
 using LT.model;
 using LT.model.Commands.Queries;
-using LT.model.Exceptions;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using System.Reflection;
-using System.Threading;
 
 namespace LT.api.Controllers.V3
 {
+    //[Authorize]
     [ApiController]    
     [ApiVersion(3)]
     [Route("api/v{v:apiVersion}/[controller]")]

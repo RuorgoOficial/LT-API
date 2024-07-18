@@ -1,6 +1,4 @@
-﻿using LT.dal.Migrations;
-using LT.messageBus;
-using LT.model;
+﻿using LT.model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;

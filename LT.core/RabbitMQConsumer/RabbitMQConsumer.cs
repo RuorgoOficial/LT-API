@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using System.Threading.Channels;
 using RabbitMQ.Client.Events;
 using Newtonsoft.Json;
-using LT.dal.Access;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 

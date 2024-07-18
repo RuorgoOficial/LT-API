@@ -17,13 +17,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LT.core.Handlers
+namespace LT.api.Application.Handlers
 {
     public class ScoreQueryHandler(
-            BaseDal<EntityScore> dal, 
-            IMapper mapper, 
-            ILTUnitOfWork unitOfWork, 
-            IMessageBus messageBus, 
+            BaseDal<EntityScore> dal,
+            IMapper mapper,
+            ILTUnitOfWork unitOfWork,
+            IMessageBus messageBus,
             IHttpRepository<EntityScoreDto> httpRepository,
             IRabbitMQMessageSender rabbitMQScoreMessageSender,
             IConfiguration configuration

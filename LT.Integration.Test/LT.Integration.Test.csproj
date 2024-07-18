@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LT.api\LT.api.csproj" />
-    <ProjectReference Include="..\LT.dal\LT.dal.csproj" />
+    <ProjectReference Include="..\LT.dal\LT.infrastructure.csproj" />
     <ProjectReference Include="..\LT.model\LT.model.csproj" />
   </ItemGroup>
 

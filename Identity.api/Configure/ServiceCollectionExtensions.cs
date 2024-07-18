@@ -3,7 +3,6 @@ using AutoMapper;
 using LT.dal.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using LT.core.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +10,7 @@ using System.Text;
 using LT.model;
 using LT.dal.Abstractions;
 using LT.dal.Access;
+using Identity.api.Services;
 
 namespace Identity.api.Configure
 {

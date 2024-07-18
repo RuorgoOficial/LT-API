@@ -9,24 +9,27 @@ using MediatR;
 using Moq;
 using System.Threading;
 using Microsoft.AspNetCore.Components.Forms;
-using LT.core.Handlers.Score;
+
 using AutoMapper;
 using LT.api.Configure;
 using Microsoft.EntityFrameworkCore;
-using LT.core.Handlers;
 using LT.core.RabbitMQSender;
+using System.Net.Http.Json;
 
 namespace LT.Integration.Test
 {
+    [Obsolete]
     [Collection(Constants.TEST_COLLECTION)]
     public class ScoreTest : IClassFixture<LTWebApplicationFactory>
     {
         private readonly DatabaseFixture _database;
         private readonly LTWebApplicationFactory _factory;
         private readonly Fixture _fixture;
+        [Obsolete]
         private readonly ScoreCore _scoreCore;
         private readonly IMapper _mapper;
 
+        [Obsolete]
         public ScoreTest(DatabaseFixture database, LTWebApplicationFactory factory)
         {
             _database = database;
@@ -47,7 +50,7 @@ namespace LT.Integration.Test
         {
             using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
-            var _ = _factory.CreateClient(new WebApplicationFactoryClientOptions());
+            var client = _factory.CreateClient(new WebApplicationFactoryClientOptions());
 
             var entity = _fixture.Build<EntityScore>().Without(x => x.Id)
                 .With(x => x.Score, 9.1M)

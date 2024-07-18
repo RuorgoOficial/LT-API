@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LT.core\LT.core.csproj" />
-    <ProjectReference Include="..\LT.dal\LT.dal.csproj" />
+    <ProjectReference Include="..\LT.core\LT.domain.csproj" />
+    <ProjectReference Include="..\LT.dal\LT.infrastructure.csproj" />
     <ProjectReference Include="..\LT.model\LT.model.csproj" />
   </ItemGroup>
 
