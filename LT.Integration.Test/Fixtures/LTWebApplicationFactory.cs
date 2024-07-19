@@ -19,7 +19,7 @@ namespace LT.Integration.Test
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.UseSetting("ConnectionString:LTContext", _database.ConnectionString);
+            builder.UseSetting("ConnectionStrings:LTContext", _database.ConnectionString);
         }
     }
 }
