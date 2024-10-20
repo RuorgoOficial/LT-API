@@ -56,6 +56,11 @@ namespace LT.dal.Access
             IQueryable<T> query = _dbSet;
             return query.FirstOrDefault(e => e.Id == id);
         }
+        public Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken)
+        {
+            IQueryable<T> query = _dbSet;
+            return query.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+        }
 
         public Task<T[]> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false)
         {

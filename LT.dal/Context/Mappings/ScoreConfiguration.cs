@@ -1,4 +1,5 @@
 ﻿using LT.model;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace LT.dal.Context.Mappings
     {
         public override void ConfigureEntity(EntityTypeBuilder<EntityScore> builder)
         {
-
+            builder.ToTable(nameof(EntityScore));
         }
     }
 }

@@ -33,6 +33,7 @@ namespace LT.api.Application.Handlers
         IRequestHandler<UpdateCommand<EntityScoreDto>, int>,
         IRequestHandler<DeleteCommand<EntityScoreDto>, int>,
         IRequestHandler<GetQuery<EntityScoreDto>, IEnumerable<EntityScoreDto>>,
+        IRequestHandler<GetQueryById<EntityScoreDto>, EntityScoreDto>,
         IRequestHandler<GetHttpQuery<EntityScoreDto>, EntityScoreDto>,
         IRequestHandler<GetScoreQuery, Result<IEnumerable<EntityScoreDto>, EntityErrorResponseDto<string>>>
     {
@@ -46,9 +47,16 @@ namespace LT.api.Application.Handlers
 
         public async Task<int> Handle(InsertCommand<EntityScoreDto> request, CancellationToken cancellationToken)
         {
-            var entity = _mapper.Map<EntityScore>(request.GetEntity());
-            await _dal.Add(entity);
-            return await _unitOfWork.SaveChangesAsync(cancellationToken);
+            try
+            {
+                var entity = _mapper.Map<EntityScore>(request.GetEntity());
+                await _dal.Add(entity);
+                return await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
         }
         public async Task Handle(InsertServiceBusCommand<EntityScoreDto> request, CancellationToken cancellationToken)
         {
@@ -74,6 +82,11 @@ namespace LT.api.Application.Handlers
         {
             var entities = await _dal.GetAllAsync(cancellationToken);
             return entities.Select(e => _mapper.Map<EntityScoreDto>(e));
+        }
+        public async Task<EntityScoreDto> Handle(GetQueryById<EntityScoreDto> request, CancellationToken cancellationToken)
+        {
+            var entity = await _dal.GetByIdAsync(request.GetId(), cancellationToken);
+            return _mapper.Map<EntityScoreDto>(entity);
         }
         public async Task<Result<IEnumerable<EntityScoreDto>, EntityErrorResponseDto<string>>> Handle(GetScoreQuery request, CancellationToken cancellationToken)
         {

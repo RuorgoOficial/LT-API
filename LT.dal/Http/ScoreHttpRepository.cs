@@ -14,7 +14,7 @@ namespace LT.dal
         private readonly HttpClient _httpClient = httpClient;
         public async Task<EntityScoreDto> GetAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"/api/v1/score/{id}");
+            var response = await _httpClient.GetAsync($"/api/v2/score/{id}");
             var apiContent = await response.Content.ReadAsStringAsync();
             var resp = JsonConvert.DeserializeObject<EntityScoreDto>(apiContent);
             if(resp is null)

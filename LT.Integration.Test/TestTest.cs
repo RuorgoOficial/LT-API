@@ -25,13 +25,11 @@ namespace LT.Integration.Test
         {
             using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
-            var _ = _factory.CreateClient(new WebApplicationFactoryClientOptions());
-
             var entity = _fixture.Build<EntityTest>().Without(x => x.Id)
                 .With(x => x.Description, "Description from test")
                 .Create();
 
-            var id = await _database.EnsureAsync(entity);
+            var id = await _database.EnsureAsync<EntityTest>(entity);
 
             var ok = id > 0;
 

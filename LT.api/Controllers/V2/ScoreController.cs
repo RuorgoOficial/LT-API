@@ -11,6 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading;
 
@@ -25,12 +26,18 @@ namespace LT.api.Controllers.V2
         private readonly GetMetrics _metrics;
         private readonly IMediator _mediator;
 
+        private readonly List<int> _dateItems;
+        private ConcurrentBag<bool> _results;
+
         public ScoreController(
             GetMetrics metrics, 
             IMediator mediator)
         {
             _metrics = metrics;
             _mediator = mediator;
+
+            _dateItems = new List<int>();
+            _results = new ConcurrentBag<bool>();
         }
 
         //Get
@@ -46,11 +53,11 @@ namespace LT.api.Controllers.V2
 
         [MapToApiVersion(2)]
         [HttpGet("{id:int}")]
-        public async Task<IEnumerable<EntityScoreDto>> GetById(int id, CancellationToken cancellationToken)
+        public async Task<EntityScoreDto> GetById(int id, CancellationToken cancellationToken)
         {
             _metrics.GetCount(nameof(ScoreController), MethodBase.GetCurrentMethod());
 
-            var query = new GetQuery<EntityScoreDto>();
+            var query = new GetQueryById<EntityScoreDto>(id);
             return await _mediator.Send(query, cancellationToken);
         }
 
@@ -62,6 +69,7 @@ namespace LT.api.Controllers.V2
             var query = new InsertCommand<EntityScoreDto>(entity);
             return await _mediator.Send(query, cancellationToken);
         }
+
         [MapToApiVersion(2)]
         [HttpPut]
         public async Task<int> Update(EntityScoreDto entity, CancellationToken cancellationToken)

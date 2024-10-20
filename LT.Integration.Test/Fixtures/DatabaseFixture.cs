@@ -13,8 +13,9 @@ namespace LT.Integration.Test
 {
     public class DatabaseFixture : IAsyncLifetime, ILTRepository<EntityBase>
     {
-        private IContainer? _container;
-        public string ConnectionString { 
+        //private IContainer? _container;
+        public string ConnectionString
+        {
             get
             {
                 return "Server=localhost;Initial Catalog=master;Persist Security Info=true;User ID=sa;Password=yourStrong(!)Password;Trust Server Certificate=true";
@@ -23,26 +24,27 @@ namespace LT.Integration.Test
 
         public async Task InitializeAsync()
         {
-            _container = new ContainerBuilder()
-                .WithImage("mcr.microsoft.com/azure-sql-edge:latest")
-                .WithEnvironment("ACCEPT_EULA", "Y")
-                .WithEnvironment("SA_PASSWORD", "yourStrong(!)Password")
-                .WithPortBinding(1433, 1433)
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
-                .Build();
+            //_container = new ContainerBuilder()
+            //    .WithImage("mcr.microsoft.com/azure-sql-edge:latest")
+            //    .WithEnvironment("ACCEPT_EULA", "Y")
+            //    .WithEnvironment("SA_PASSWORD", "yourStrong(!)Password")
+            //    .WithPortBinding(1433, 1433)
+            //    .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
+            //    .Build();
 
-            await _container.StartAsync();
+            //await _container.StartAsync();
 
             await using var db = CreateDBContext();
-            await db.Database.MigrateAsync();
+            //await db.Database.MigrateAsync();
         }
 
         public LTDBContext CreateDBContext()
         {
-            ArgumentNullException.ThrowIfNull(_container);
+            //ArgumentNullException.ThrowIfNull(_container);
+            var databaseName = Guid.NewGuid().ToString();
             return new LTDBContext(
                 new DbContextOptionsBuilder<LTDBContext>()
-                    .UseSqlServer(ConnectionString)
+                    .UseInMemoryDatabase(databaseName)
                     .Options);
         }
 
@@ -74,40 +76,42 @@ namespace LT.Integration.Test
             return await dbContext.SaveChangesAsync();
         }
 
-        private async Task<DbConnection> OpenConnectionAsync()
-        {
-            var connection = new SqlConnection(ConnectionString);
-            await connection.OpenAsync();
-            return connection;
-        }
+        //private async Task<DbConnection> OpenConnectionAsync()
+        //{
+        //    var connection = new SqlConnection(ConnectionString);
+        //    await connection.OpenAsync();
+        //    return connection;
+        //}
 
-        public async Task<bool> RepeatScalarQueryUntilAsync<T>(CommandDefinition cmd, Func<T, bool> predicate, CancellationToken cancellationToken)
-        {
-            while(true)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
+        //public async Task<bool> RepeatScalarQueryUntilAsync<T>(CommandDefinition cmd, Func<T, bool> predicate, CancellationToken cancellationToken)
+        //{
+        //    while(true)
+        //    {
+        //        cancellationToken.ThrowIfCancellationRequested();
 
-                using (var conn = await OpenConnectionAsync())
-                {
-                    var result = await conn.ExecuteScalarAsync<T>(cmd);
-                    if(result is not null)
-                    {
-                        if (predicate(result))
-                        {
-                            return true;
-                        }
-                    }
-                }
+        //        using (var conn = await OpenConnectionAsync())
+        //        {
+        //            var result = await conn.ExecuteScalarAsync<T>(cmd);
+        //            if(result is not null)
+        //            {
+        //                if (predicate(result))
+        //                {
+        //                    return true;
+        //                }
+        //            }
+        //        }
 
-                await Task.Delay(200, cancellationToken);
-            }
-        }
+        //        await Task.Delay(200, cancellationToken);
+        //    }
+        //}
 
         public async Task DisposeAsync()
         {
-            if(_container is not null) { 
-                await _container.DisposeAsync();
-            }
+            //if (_container is not null)
+            //{
+            //    await _container.DisposeAsync();
+            //}
+            await Task.CompletedTask;
         }
 
         public async Task Add(EntityBase entity)
@@ -126,7 +130,7 @@ namespace LT.Integration.Test
             return;
         }
 
-        public void Remove(EntityBase entity)
+        public Task Remove(EntityBase entity)
         {
             throw new NotImplementedException();
         }
@@ -156,9 +160,5 @@ namespace LT.Integration.Test
             throw new NotImplementedException();
         }
 
-        Task ILTRepository<EntityBase>.Remove(EntityBase entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
