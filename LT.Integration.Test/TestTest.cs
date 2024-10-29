@@ -3,6 +3,7 @@ using FluentAssertions;
 using LT.model.Commands.Queries;
 using LT.model;
 using Microsoft.AspNetCore.Mvc.Testing;
+using MediatR;
 
 namespace LT.Integration.Test
 {

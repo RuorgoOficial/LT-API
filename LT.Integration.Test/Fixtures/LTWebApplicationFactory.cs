@@ -11,16 +11,19 @@ using LT.dal.Abstractions;
 using LT.dal.Access;
 using LT.dal.Context;
 using LT.Integration.Test.Mocks;
+using LT.messageBus;
 using LT.model;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
 namespace LT.Integration.Test
 {
-    public class LTWebApplicationFactory : WebApplicationFactory<Program>
+    public class LTWebApplicationFactory : WebApplicationFactory<TestProgram>
     {
         private readonly DatabaseFixture _database;
         public LTWebApplicationFactory(DatabaseFixture database)
@@ -28,22 +31,15 @@ namespace LT.Integration.Test
             _database = database;
         }
 
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseSetting("ConnectionStrings:LTContext", _database.ConnectionString);
-            builder.ConfigureServices(s => {
+            builder.ConfigureServices(s =>
+            {
+                s.AddMediatRAssemblies();
+                s.AddDal();
 
-                s.AddScoped<ILTUnitOfWork, LTUnitOfWork>();
-                s.AddScoped(typeof(ILTRepository<EntityScore>), typeof(BaseDal<EntityScore>));
-                s.AddScoped(typeof(ILTRepository<EntityScore>), typeof(ScoreDal));
-                s.AddScoped(typeof(ILTRepository<EntityTest>), typeof(BaseDal<EntityTest>));
-                s.AddScoped(typeof(ILTRepository<EntityTest>), typeof(TestDal));
-                s.AddScoped<BaseDal<EntityScore>>();
-                s.AddScoped<BaseDal<EntityTest>>();
-                s.AddScoped<ScoreDal>();
-                s.AddScoped<TestDal>();
-
-                s.AddApplication();
                 s.AddDbContext<LTDBContext>(opt => opt.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()));
                 s.AddDbContext<LoggerDBContext>(opt => opt.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()));
                 s.AddDbContext<IdentityDbContext>(opt => opt.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()));
@@ -61,7 +57,19 @@ namespace LT.Integration.Test
                 s.AddHostedService<RabbitMQConsumerMock<EntityScoreDto>>();
                 s.AddScoped<IHttpRepository<EntityScoreDto>, ScoreHttpRepositoryMock>();
                 s.AddHttpClient<IHttpRepository<EntityScoreDto>, ScoreHttpRepositoryMock>();
-            });
+
+                var optionsBuilder = new DbContextOptionsBuilder<LTDBContext>();
+                optionsBuilder.UseSqlServer(_database.ConnectionString);
+
+                var context = new LTDBContext(optionsBuilder.Options);
+                s.AddSingleton(new ScoreDal(context));
+                s.AddSingleton(new LTUnitOfWork(context));
+                s.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumerMock>();
+
+                s.AddScoped<IMessageBus, AzureServiceBusMessageBusMock>();
+            }
+            );
+
         }
     }
 }

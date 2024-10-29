@@ -16,6 +16,9 @@ using Microsoft.EntityFrameworkCore;
 using LT.core.RabbitMQSender;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
+using static Dapper.SqlMapper;
+using Microsoft.Extensions.DependencyInjection;
+using FluentAssertions.Common;
 
 namespace LT.Integration.Test
 {
@@ -31,7 +34,8 @@ namespace LT.Integration.Test
         private readonly IMapper _mapper;
 
         [Obsolete]
-        public ScoreTest(DatabaseFixture database, LTWebApplicationFactory factory)
+        public ScoreTest(DatabaseFixture database,
+            LTWebApplicationFactory factory)
         {
             _database = database;
             _factory = factory;
@@ -45,58 +49,55 @@ namespace LT.Integration.Test
                 mc.AddProfile(new MappingProfile());
             });
             _mapper = mapperConfig.CreateMapper();
+
         }
-        //[Fact]
-        //public async Task TestInsert_Score()
-        //{
-        //    using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        [Fact]
+        public async Task TestInsert_Score()
+        {
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
-        //    var client = _factory.CreateClient(new WebApplicationFactoryClientOptions());
+                var entityDto = _fixture.Build<EntityScoreDto>().Without(x => x.Id)
+                    .With(x => x.Score, 9.1M)
+                    .With(x => x.Acronym, "RUB")
+                    .With(x => x.CreatedTimestamp, DateTime.UtcNow)
+                    .With(x => x.UpdatedTimestamp, DateTime.UtcNow)
+                    .Create();
 
-        //    var entityDto = _fixture.Build<EntityScoreDto>().Without(x => x.Id)
-        //        .With(x => x.Score, 9.1M)
-        //        .With(x => x.Acronym, "RUB")
-        //        .With(x => x.CreatedTimestamp, DateTime.UtcNow)
-        //        .With(x => x.UpdatedTimestamp, DateTime.UtcNow)
-        //        .Create();
 
-        //    var response = await client.PostAsJsonAsync("api/v2/score", entityDto);
-        //    response.EnsureSuccessStatusCode();
+                var insertCommand = new InsertCommand<EntityScoreDto>(entityDto);
+                var insertResponseId = await _mediator.Send(insertCommand, timeout.Token);
 
-        //    string idString = (await response.Content.ReadAsStringAsync()) ?? string.Empty;
-        //    var id = 0;
+                var ok = insertResponseId > 0;
+                ok.Should().BeTrue();
+            }
+        }
+        [Fact]
+        public async Task TestInsertAndGet_Score()
+        {
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
-        //    var success = int.TryParse(idString, out id);
-        //    success.Should().BeTrue();
+                var entityDto = _fixture.Build<EntityScoreDto>().Without(x => x.Id)
+                    .With(x => x.Score, 9.1M)
+                    .With(x => x.Acronym, "RUB")
+                    .With(x => x.CreatedTimestamp, DateTime.UtcNow)
+                    .With(x => x.UpdatedTimestamp, DateTime.UtcNow)
+                .Create();
 
-        //    var ok = id > 0;
-        //    ok.Should().BeTrue();
-        //}
-        //[Fact]
-        //public async Task TestInsertAndGet_Score()
-        //{
-        //    using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                var insertCommand = new InsertCommand<EntityScoreDto>(entityDto);
+                var insertResponseId = await _mediator.Send(insertCommand, timeout.Token);
 
-        //    var client = _factory.CreateClient(new WebApplicationFactoryClientOptions());
+                var getQuery = new GetQueryById<EntityScoreDto>(insertResponseId);
+                var getResponse = await _mediator.Send(getQuery, timeout.Token);
 
-        //    var entityDto = _fixture.Build<EntityScoreDto>().Without(x => x.Id)
-        //        .With(x => x.Score, 9.1M)
-        //        .With(x => x.Acronym, "RUB")
-        //        .With(x => x.CreatedTimestamp, DateTime.UtcNow)
-        //        .With(x => x.UpdatedTimestamp, DateTime.UtcNow)
-        //        .Create();
-
-        //    var insertResponse = await client.PostAsJsonAsync("api/v2/score", entityDto);
-        //    insertResponse.EnsureSuccessStatusCode();
-
-        //    var response = await client.GetAsync("api/v2/score");
-        //    response.EnsureSuccessStatusCode();
-
-        //    var responseString = (await response.Content.ReadAsStringAsync());
-        //    var scores = JsonConvert.DeserializeObject<IEnumerable<EntityScoreDto>>(responseString);
-        //    scores.Should().HaveCountGreaterThan(0);
-        //}
-
+                getResponse.Id.Should().BeGreaterThan(0);
+            }
+        }
         [Fact]
         public void TestInsert_Score_Through_Core()
         {
