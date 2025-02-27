@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace LT.api.Application.Handlers
 {
     public class ScoreQueryHandler(
-            BaseDal<EntityScore> dal,
+            ILTRepository<EntityScore> dal,
             IMapper mapper,
             ILTUnitOfWork unitOfWork,
             IMessageBus messageBus,
@@ -37,7 +37,7 @@ namespace LT.api.Application.Handlers
         IRequestHandler<GetHttpQuery<EntityScoreDto>, EntityScoreDto>,
         IRequestHandler<GetScoreQuery, Result<IEnumerable<EntityScoreDto>, EntityErrorResponseDto<string>>>
     {
-        private readonly BaseDal<EntityScore> _dal = dal;
+        private readonly ILTRepository<EntityScore> _dal = dal;
         private readonly IMapper _mapper = mapper;
         private readonly ILTUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMessageBus _messageBus = messageBus;

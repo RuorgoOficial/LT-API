@@ -17,5 +17,6 @@ namespace LT.dal.Abstractions
         ValueTask<T?> FindByIdAsync(long id, CancellationToken cancellationToken);
         Task<T[]> FindAsync(ISpecification<T> spec, CancellationToken cancellationToken, bool asNoTracking = false, string? includes = null);
         Task<T[]> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false);
+        Task<T?> GetByIdAsync(int v, CancellationToken cancellationToken);
     }
 }
