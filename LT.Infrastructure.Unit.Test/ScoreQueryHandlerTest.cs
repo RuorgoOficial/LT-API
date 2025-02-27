@@ -48,6 +48,7 @@ namespace LT.Application.Unit.Test
                 _configuration.Object
             );
         }
+
         [Fact]
         public async Task Handle_OnInsertCommand_ShouldBeInsertedAsync()
         {
