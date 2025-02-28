@@ -17,8 +17,8 @@ namespace LT.dal.Context
     {
         public DbSet<EntityTest> Test { get; set; }
         public DbSet<EntityScore> Score { get; set; }
-        public DbSet<EntityTest> Item { get; set; }
-        public DbSet<EntityScore> ItemTransaction { get; set; }
+        public DbSet<EntityItem> Item { get; set; }
+        public DbSet<EntityItemTransaction> ItemTransaction { get; set; }
 
         public LTDBContext(DbContextOptions<LTDBContext> options) : base(options) { 
         }

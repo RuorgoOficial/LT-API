@@ -13,7 +13,7 @@ namespace LT.dal.Context.Mappings
     {
         public override void ConfigureEntity(EntityTypeBuilder<EntityScore> builder)
         {
-            builder.ToTable(nameof(EntityScore));
+
         }
     }
 }
