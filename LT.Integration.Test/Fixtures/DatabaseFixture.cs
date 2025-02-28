@@ -160,7 +160,7 @@ namespace LT.Integration.Test
             throw new NotImplementedException();
         }
 
-        public Task<EntityBase> GetByIdAsync(int v, CancellationToken cancellationToken)
+        public Task<EntityBase?> GetByIdAsync(int v, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

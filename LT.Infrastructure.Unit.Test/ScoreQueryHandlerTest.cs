@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using AutoMapper;
+using Castle.Core.Logging;
 using LT.api.Application.Handlers;
 using LT.core.RabbitMQSender;
 using LT.dal.Abstractions;
@@ -9,6 +10,7 @@ using LT.messageBus;
 using LT.model;
 using LT.model.Commands.Queries;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace LT.Application.Unit.Test
@@ -23,6 +25,7 @@ namespace LT.Application.Unit.Test
         private readonly Mock<IHttpRepository<EntityScoreDto>> _httpRepository;
         private readonly Mock<IRabbitMQMessageSender> _rabbitMQScoreMessageSender;
         private readonly Mock<IConfiguration> _configuration;
+        private readonly Mock<ILogger<ScoreQueryHandler>> _logger;
 
         private readonly Fixture _fixture;
 
@@ -37,6 +40,8 @@ namespace LT.Application.Unit.Test
             _httpRepository = new Mock<IHttpRepository<EntityScoreDto>>();
             _rabbitMQScoreMessageSender = new Mock<IRabbitMQMessageSender>();
             _configuration = new Mock<IConfiguration>();
+            _logger = new Mock<ILogger<ScoreQueryHandler>>();
+            
 
             _scoreQueryHandler = new ScoreQueryHandler(
                 _baseDal.Object, 
@@ -45,7 +50,8 @@ namespace LT.Application.Unit.Test
                 _messageBus.Object,
                 _httpRepository.Object,
                 _rabbitMQScoreMessageSender.Object,
-                _configuration.Object
+                _configuration.Object,
+                _logger.Object
             );
         }
 
