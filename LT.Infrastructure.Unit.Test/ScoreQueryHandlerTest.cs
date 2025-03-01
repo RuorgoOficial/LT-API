@@ -47,7 +47,6 @@ namespace LT.Application.Unit.Test
                 _baseDal.Object, 
                 _mapper.Object, 
                 _unitOfWork.Object, 
-                _messageBus.Object,
                 _httpRepository.Object,
                 _rabbitMQScoreMessageSender.Object,
                 _configuration.Object,
