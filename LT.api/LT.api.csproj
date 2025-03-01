@@ -34,8 +34,4 @@
     <ProjectReference Include="..\LT.model\LT.model.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Application\Handlers\Base\" />
-  </ItemGroup>
-
 </Project>
