@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace LT.core.RabbitMQSender
 {
-    public class RabbitMQMessageSender : IRabbitMQMessageSender
+    public class RabbitMQMessageSender<T> : IRabbitMQMessageSender<T>
+        where T : EntityBaseDto
     {
         private readonly string _hostname;
         private readonly string _password;
@@ -28,17 +29,28 @@ namespace LT.core.RabbitMQSender
                 Password = _password,
                 UserName = _userName,
             };
-            _connection = factory.CreateConnection();
+            _connection = factory.CreateConnectionAsync().Result;
         }
 
-        public void SendMessage(EntityBaseDto message, string? queueName)
+        public async Task SendMessageAsync(T message, string queueName, CancellationToken c)
         {
-            using var channel = _connection.CreateModel();
-            channel.QueueDeclare(queue: queueName, false, false, false, arguments: null);
+            using var channel = await _connection.CreateChannelAsync();
+            await channel.QueueDeclareAsync(queue: queueName, false, false, false, arguments: null);
+
+            var props = new BasicProperties();
+            props.ContentType = "text/plain";
+            props.DeliveryMode = DeliveryModes.Persistent;
 
             var json = JsonConvert.SerializeObject(message);
             var body = Encoding.UTF8.GetBytes(json);
-            channel.BasicPublish(exchange:"", routingKey:queueName, basicProperties:null, body:body);
+            await channel.BasicPublishAsync(
+                exchange: "", 
+                routingKey: queueName,
+                mandatory: true,
+                basicProperties: props, 
+                body: body,
+                cancellationToken: c
+            );
         }
     }
 }

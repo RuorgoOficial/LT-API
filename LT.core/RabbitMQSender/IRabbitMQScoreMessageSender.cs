@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace LT.core.RabbitMQSender
 {
-    public interface IRabbitMQMessageSender
+    public interface IRabbitMQMessageSender<T>
+        where T : EntityBaseDto
     {
-        void SendMessage(EntityBaseDto message, string queueName);
+        Task SendMessageAsync(T message, string queueName, CancellationToken cancellationToken);
     }
 }

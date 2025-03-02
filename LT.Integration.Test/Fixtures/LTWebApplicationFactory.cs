@@ -53,7 +53,7 @@ namespace LT.Integration.Test
                 s.AddSingleton(mapper);
 
                 //Mock this data.
-                s.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSenderMock>();
+                s.AddSingleton<IRabbitMQMessageSender<EntityScoreDto>, RabbitMQMessageSenderMock<EntityScoreDto>>();
                 s.AddHostedService<RabbitMQConsumerMock<EntityScoreDto>>();
                 s.AddScoped<IHttpRepository<EntityScoreDto>, ScoreHttpRepositoryMock>();
                 s.AddHttpClient<IHttpRepository<EntityScoreDto>, ScoreHttpRepositoryMock>();
