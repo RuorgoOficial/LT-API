@@ -25,7 +25,7 @@ namespace LT.api.Application.Handlers
             IMapper mapper,
             ILTUnitOfWork unitOfWork,
             IHttpRepository<EntityScoreDto> httpRepository,
-            IRabbitMQMessageSender rabbitMQScoreMessageSender,
+            IRabbitMQMessageSender<EntityScoreDto> rabbitMQScoreMessageSender,
             IConfiguration configuration,
             ILogger<ScoreQueryHandler> logger
         ) :
@@ -37,7 +37,7 @@ namespace LT.api.Application.Handlers
         private readonly ILTRepository<EntityScore> _dal = dal;
         private readonly IMapper _mapper = mapper;
         private readonly IHttpRepository<EntityScoreDto> _httpRepository = httpRepository;
-        private readonly IRabbitMQMessageSender _rabbitMQScoreMessageSender = rabbitMQScoreMessageSender;
+        private readonly IRabbitMQMessageSender<EntityScoreDto> _rabbitMQScoreMessageSender = rabbitMQScoreMessageSender;
         private readonly IConfiguration _configuration = configuration;
         private readonly ILogger<ScoreQueryHandler> _logger = logger;
 
@@ -45,7 +45,7 @@ namespace LT.api.Application.Handlers
         {
             _logger.LogInformation($"{nameof(InsertServiceBusCommand<EntityScoreDto>)} - {Newtonsoft.Json.JsonConvert.SerializeObject(request)}");
             var queueName = _configuration.GetSection("RabbitMQSettings:ScoreQueueName").Value;
-            _rabbitMQScoreMessageSender.SendMessage(request.GetEntity(), queueName!);
+            await _rabbitMQScoreMessageSender.SendMessageAsync(request.GetEntity(), queueName!, cancellationToken);
             await Task.CompletedTask;
         }
         public async Task<Result<IEnumerable<EntityScoreDto>, EntityErrorResponseDto<string>>> Handle(GetScoreQuery request, CancellationToken cancellationToken)

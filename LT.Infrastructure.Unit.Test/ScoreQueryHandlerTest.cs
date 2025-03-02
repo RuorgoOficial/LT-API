@@ -23,7 +23,7 @@ namespace LT.Application.Unit.Test
         private readonly Mock<ILTUnitOfWork> _unitOfWork;
         private readonly Mock<IMessageBus> _messageBus;
         private readonly Mock<IHttpRepository<EntityScoreDto>> _httpRepository;
-        private readonly Mock<IRabbitMQMessageSender> _rabbitMQScoreMessageSender;
+        private readonly Mock<IRabbitMQMessageSender<EntityScoreDto>> _rabbitMQScoreMessageSender;
         private readonly Mock<IConfiguration> _configuration;
         private readonly Mock<ILogger<ScoreQueryHandler>> _logger;
 
@@ -38,7 +38,7 @@ namespace LT.Application.Unit.Test
             _unitOfWork = new Mock<ILTUnitOfWork>();
             _messageBus = new Mock<IMessageBus>();
             _httpRepository = new Mock<IHttpRepository<EntityScoreDto>>();
-            _rabbitMQScoreMessageSender = new Mock<IRabbitMQMessageSender>();
+            _rabbitMQScoreMessageSender = new Mock<IRabbitMQMessageSender<EntityScoreDto>>();
             _configuration = new Mock<IConfiguration>();
             _logger = new Mock<ILogger<ScoreQueryHandler>>();
             

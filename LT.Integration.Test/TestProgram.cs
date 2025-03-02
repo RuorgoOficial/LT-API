@@ -35,7 +35,7 @@ IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 //Mock this data.
-builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSenderMock>();
+builder.Services.AddSingleton<IRabbitMQMessageSender<EntityScoreDto>, RabbitMQMessageSenderMock<EntityScoreDto>>();
 builder.Services.AddHostedService<RabbitMQConsumerMock<EntityScoreDto>>();
 builder.Services.AddScoped<IHttpRepository<EntityScoreDto>, ScoreHttpRepositoryMock>();
 builder.Services.AddHttpClient<IHttpRepository<EntityScoreDto>, ScoreHttpRepositoryMock>();

@@ -11,16 +11,17 @@ using System.Threading.Tasks;
 
 namespace LT.Integration.Test.Mocks
 {
-    public class RabbitMQMessageSenderMock : IRabbitMQMessageSender
+    public class RabbitMQMessageSenderMock<T> : IRabbitMQMessageSender<T>
+        where T : EntityBaseDto
     {
 
         public RabbitMQMessageSenderMock(IConfiguration configuration)
         {
         }
 
-        public void SendMessage(EntityBaseDto message, string? queueName)
+        public async Task SendMessageAsync(T message, string queueName, CancellationToken cancellationToken)
         {
-            
+            await Task.CompletedTask;
         }
     }
 }

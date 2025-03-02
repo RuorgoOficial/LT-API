@@ -24,7 +24,7 @@ namespace LT.core.RabbitMQConsumer
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IConfiguration _configuration;
         private IConnection _connection;
-        private IModel _channel;
+        private IChannel _channel;
         private string _queueName;
 
         public RabbitMQConsumer(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
@@ -39,23 +39,22 @@ namespace LT.core.RabbitMQConsumer
                 Password = _configuration.GetSection("RabbitMQSettings:Password").Value,
                 UserName = _configuration.GetSection("RabbitMQSettings:UserName").Value,
             };
-            _connection = factory.CreateConnection();
-            _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: _queueName, false, false, false, arguments: null);
+            _connection = factory.CreateConnectionAsync().Result;
+            _channel = _connection.CreateChannelAsync().Result;
+            QueueDeclareOk queueDeclareOk = _channel.QueueDeclareAsync(queue: _queueName, false, false, false, arguments: null).Result;
         }
 
-        protected override Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (sender, e) => Consumer_Received(sender, e, cancellationToken);
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+            consumer.ReceivedAsync += (sender, e) => Consumer_Received(sender, e, cancellationToken);
 
-            _channel.BasicConsume(_queueName, false, consumer);
+            await _channel.BasicConsumeAsync(_queueName, false, consumer);
 
-            return Task.CompletedTask;
         }
-        private async void Consumer_Received(object? sender, BasicDeliverEventArgs e, CancellationToken cancellationToken)
+        private async Task Consumer_Received(object? sender, BasicDeliverEventArgs e, CancellationToken cancellationToken)
         {
             var content = Encoding.UTF8.GetString(e.Body.ToArray());
             var entity = JsonConvert.DeserializeObject<T>(content);
@@ -67,7 +66,7 @@ namespace LT.core.RabbitMQConsumer
             var response = await mediator.Send(command, cancellationToken);
             if(response > 0)
             {
-                _channel.BasicAck(e.DeliveryTag, false);
+                await _channel.BasicAckAsync(e.DeliveryTag, false);
             }
         }
     }

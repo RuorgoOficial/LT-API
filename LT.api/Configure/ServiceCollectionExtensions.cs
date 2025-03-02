@@ -164,7 +164,7 @@ namespace LT.api.Configure
         }
         public static IServiceCollection AddRabbitMQSender(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
+            services.AddSingleton<IRabbitMQMessageSender<EntityScoreDto>, RabbitMQMessageSender<EntityScoreDto>>();
             
             services.AddHostedService<RabbitMQConsumer<EntityScoreDto>>();
 
