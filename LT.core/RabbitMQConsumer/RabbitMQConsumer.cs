@@ -35,9 +35,9 @@ namespace LT.core.RabbitMQConsumer
             _queueName = _configuration.GetSection("RabbitMQSettings:ScoreQueueName").Value!;
             var factory = new ConnectionFactory
             {
-                HostName = _configuration.GetSection("RabbitMQSettings:HostName").Value,
-                Password = _configuration.GetSection("RabbitMQSettings:Password").Value,
-                UserName = _configuration.GetSection("RabbitMQSettings:UserName").Value,
+                HostName = _configuration.GetSection("RabbitMQSettings:HostName").Value!,
+                Password = _configuration.GetSection("RabbitMQSettings:Password").Value!,
+                UserName = _configuration.GetSection("RabbitMQSettings:UserName").Value!,
             };
             _connection = factory.CreateConnectionAsync().Result;
             _channel = _connection.CreateChannelAsync().Result;
